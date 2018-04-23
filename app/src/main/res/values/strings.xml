@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">EHealth</string>
+
+    <!--Scan Activity-->
+    <string name="stop_scan">Stop Scanning</string>
+    <string name="start_scan">Start scanning</string>
+    <string name="request_activate_bluetooth">Please turn on bluetooth</string>
+</resources>
