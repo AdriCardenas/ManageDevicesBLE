@@ -1,10 +1,13 @@
 package adriancardenas.com.ehealth.Adapters.ViewHolders;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import adriancardenas.com.ehealth.MainActivity;
 import adriancardenas.com.ehealth.R;
 import adriancardenas.com.ehealth.Utils.Utils;
 import adriancardenas.com.ehealth.model.BluetoothLowEnergyDevice;
@@ -19,6 +22,7 @@ public class ScanDeviceViewHolder extends RecyclerView.ViewHolder{
     TextView deviceName;
     TextView addressDevice;
     View rootCell;
+    Context context;
 
     public ScanDeviceViewHolder(View itemView) {
         super(itemView);
@@ -26,6 +30,7 @@ public class ScanDeviceViewHolder extends RecyclerView.ViewHolder{
         addressDevice = itemView.findViewById(R.id.address_device);
         signalBar = itemView.findViewById(R.id.signal_progress_bar);
         rootCell = itemView.findViewById(R.id.root_cell);
+        context = itemView.getContext();
     }
 
     public void bind(BluetoothLowEnergyDevice bluetoothDevice){
@@ -35,6 +40,8 @@ public class ScanDeviceViewHolder extends RecyclerView.ViewHolder{
         signalBar.setProgress(getIntensity(bluetoothDevice.getRssi()));
         rootCell.setOnClickListener((View)->{
             Utils.showSnackbar(itemView, "Has pulsado en un item");
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
         });
     }
 
