@@ -6,6 +6,9 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import adriancardenas.com.ehealth.Utils.Utils;
 
@@ -16,19 +19,40 @@ public class LauncherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_launcher);
 
+        ImageView icon = findViewById(R.id.icon_launcher);
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade);
         Utils.checkBluetoothPermission(this);
 
-        new Handler().postDelayed(new Runnable() {
+        animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
-            public void run() {
-                Intent intent = new Intent(LauncherActivity.this,ScanActivity.class);
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Intent intent = new Intent(LauncherActivity.this, ScanActivity.class);
                 startActivity(intent);
                 finish();
             }
-        }, DURATION_SPLASH);
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        icon.startAnimation(animation);
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                Intent intent = new Intent(LauncherActivity.this,ScanActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }, DURATION_SPLASH);
     }
 }

@@ -3,6 +3,7 @@
     <color name="colorPrimary">#ffc235</color>
     <color name="colorPrimaryDark">#ffb012</color>
     <color name="colorAccent">#262624</color>
-    <color name="rippleColor">#e44d23</color>
+
+    <color name="secondaryColor">#e44d23</color>
     <color name="backgroundLauncher">#b7e49423</color>
 </resources>
