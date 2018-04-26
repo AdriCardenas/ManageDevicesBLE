@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://D:\Proyectos\ManageDevicesBLE\EHealth.iml" filepath="D:\Proyectos\ManageDevicesBLE\EHealth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EHealth.iml" filepath="$PROJECT_DIR$/EHealth.iml" />
       <module fileurl="file://$PROJECT_DIR$/ManageDevicesBLE.iml" filepath="$PROJECT_DIR$/ManageDevicesBLE.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

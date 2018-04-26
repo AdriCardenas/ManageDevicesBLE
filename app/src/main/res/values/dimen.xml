@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Splash Screen-->
+    <dimen name="splash_title">40sp</dimen>
+
     <dimen name="text_button">20sp</dimen>
     <dimen name="text_name">18sp</dimen>
     <dimen name="text_address">14sp</dimen>
+
+    <dimen name="toolbar_item">10sp</dimen>
+
+
 
 </resources>

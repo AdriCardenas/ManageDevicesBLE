@@ -3,6 +3,7 @@ package adriancardenas.com.ehealth;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -22,6 +23,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.cubic_chart)
     LineChart mChart;
+    @BindView(R.id.battery_lvl_iv)
+    ImageView batteryLevel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
         // dont forget to refresh the drawing
         mChart.invalidate();
+
+        batteryLevel.setImageDrawable(getDrawable(R.drawable.ic_battery_10));
     }
 
     private void setData(int count, float range) {

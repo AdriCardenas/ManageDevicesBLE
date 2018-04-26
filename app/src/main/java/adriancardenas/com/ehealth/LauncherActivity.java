@@ -2,18 +2,22 @@ package adriancardenas.com.ehealth;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import adriancardenas.com.ehealth.Utils.Utils;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class LauncherActivity extends AppCompatActivity {
     private final int DURATION_SPLASH = 1000;
+    ImageView iconLauncher;
+    TextView titleLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +27,14 @@ public class LauncherActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_launcher);
 
-        ImageView icon = findViewById(R.id.icon_launcher);
+        iconLauncher = findViewById(R.id.icon_launcher);
+        titleLauncher = findViewById(R.id.title_launcher);
 
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fade);
+        Animation upToDownAnimation = AnimationUtils.loadAnimation(this, R.anim.uptodown);
+        Animation downToUpAnimation = AnimationUtils.loadAnimation(this, R.anim.downtoup);
         Utils.checkBluetoothPermission(this);
 
-        animation.setAnimationListener(new Animation.AnimationListener() {
+        upToDownAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
             }
@@ -44,15 +50,7 @@ public class LauncherActivity extends AppCompatActivity {
             public void onAnimationRepeat(Animation animation) {
             }
         });
-        icon.startAnimation(animation);
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent intent = new Intent(LauncherActivity.this,ScanActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        }, DURATION_SPLASH);
+        iconLauncher.startAnimation(upToDownAnimation);
+        titleLauncher.startAnimation(downToUpAnimation);
     }
 }

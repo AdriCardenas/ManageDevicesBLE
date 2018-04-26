@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--Common colours-->
     <color name="colorPrimary">#ffc235</color>
     <color name="colorPrimaryDark">#ffb012</color>
     <color name="colorAccent">#262624</color>
 
     <color name="secondaryColor">#e44d23</color>
     <color name="backgroundLauncher">#b7e49423</color>
+
+    <color name="black">#222222</color>
+    <color name="dark_black">#000000</color>
+    <color name="white">#ffffff</color>
+
+    <!--Battery colours-->
+    <color name="battery_level_10">#bb3333</color>
+    <color name="battery_level_20">#bb4422</color>
+    <color name="battery_level_30">#cc6622</color>
+    <color name="battery_level_50">#ffb012</color>
+    <color name="battery_level_60">#ffc235</color>
+    <color name="battery_level_80">#DAFF64</color>
+    <color name="battery_level_90">#66CC33</color>
+    <color name="battery_level_100">#44FA22</color>
+
 </resources>

@@ -11,10 +11,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Placeholder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +36,8 @@ import static adriancardenas.com.ehealth.Utils.Constants.REQUEST_BLUETOOTH_ENABL
 
 public class ScanActivity extends AppCompatActivity {
 
+//    @BindView(R.id.placeholder)
+//    Placeholder placeholder;
     @BindView(R.id.scan_button)
     Button scanButton;
     @BindView(R.id.progress_bar_scan)
@@ -69,7 +73,8 @@ public class ScanActivity extends AppCompatActivity {
 
         Utils.checkBluetoothPermission(this);
 
-        scanButton.setOnClickListener((View) -> {
+        scanButton.setOnClickListener((View v) -> {
+            //swapItem(v);
             if (isScanning) {
                 isScanning = false;
                 progressBar.setVisibility(View.GONE);
@@ -92,6 +97,11 @@ public class ScanActivity extends AppCompatActivity {
             }
         });
     }
+
+//    public void swapItem(View v){
+//        TransitionManager.beginDelayedTransition(constraintLayout);
+//        placeholder.setContentId(v.getId());
+//    }
 
     @Override
     protected void onResume() {

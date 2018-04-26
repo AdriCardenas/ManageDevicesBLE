@@ -2,28 +2,33 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout_scan"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="adriancardenas.com.ehealth.ScanActivity"
-    android:id="@+id/constraint_layout_scan">
-
-    <Space
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    tools:context="adriancardenas.com.ehealth.ScanActivity">
+<!--TODO CAMBIAR A IMAGEVIEW PARA QUE FUNCIONE EL VIEWHOLDER-->
+    <!--<android.support.constraint.Placeholder-->
+        <!--android:id="@+id/placeholder"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--android:visibility="visible"/>-->
 
     <Button
         android:id="@+id/scan_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:layout_marginStart="64dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:textSize="@dimen/text_button"
         android:background="@drawable/ripple_effect"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
         android:text="@string/start_scan"
         android:textColor="@color/cardview_light_background"
+        android:textSize="@dimen/text_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,9 +40,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -48,5 +53,33 @@
         app:layout_constraintTop_toBottomOf="@+id/scan_button">
 
     </android.support.v7.widget.RecyclerView>
+
+    <!--<android.support.constraint.Guideline-->
+        <!--android:id="@+id/guideline5"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--app:layout_constraintGuide_percent="0.25" />-->
+
+    <!--<android.support.constraint.Guideline-->
+        <!--android:id="@+id/guideline6"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--app:layout_constraintGuide_percent="0.75" />-->
+
+    <!--<android.support.constraint.Guideline-->
+        <!--android:id="@+id/guideline7"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--app:layout_constraintGuide_percent="0.35" />-->
+
+    <!--<android.support.constraint.Guideline-->
+        <!--android:id="@+id/guideline8"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--app:layout_constraintGuide_percent="0.60" />-->
 
 </android.support.constraint.ConstraintLayout>
