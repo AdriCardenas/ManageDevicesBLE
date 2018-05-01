@@ -15,7 +15,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LauncherActivity extends AppCompatActivity {
-    private final int DURATION_SPLASH = 1000;
     ImageView iconLauncher;
     TextView titleLauncher;
 

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Common colours-->
-    <color name="colorPrimary">#ffc235</color>
-    <color name="colorPrimaryDark">#ffb012</color>
+    <color name="colorPrimary">#923fff</color>
+    <color name="colorPrimaryDark">#6329af</color>
     <color name="colorAccent">#262624</color>
 
-    <color name="secondaryColor">#e44d23</color>
-    <color name="backgroundLauncher">#b7e49423</color>
+    <color name="secondaryColor">#c763ef</color>
+    <color name="backgroundLauncher">#c8923fc8</color>
 
     <color name="black">#222222</color>
     <color name="dark_black">#000000</color>
