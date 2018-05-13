@@ -1,30 +1,46 @@
 package adriancardenas.com.ehealth;
 
-import android.graphics.Color;
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IFillFormatter;
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
-import java.util.ArrayList;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 
+import java.io.File;
+import java.io.IOException;
+
+import adriancardenas.com.ehealth.Utils.Constants;
+import adriancardenas.com.ehealth.Utils.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static adriancardenas.com.ehealth.Utils.Constants.WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT;
+import static adriancardenas.com.ehealth.Utils.Utils.getPhotoCode;
 
 public class MainActivity extends AppCompatActivity {
-    @BindView(R.id.cubic_chart)
-    LineChart mChart;
-    @BindView(R.id.battery_lvl_iv)
-    ImageView batteryLevel;
+    @BindView(R.id.profile_image)
+    CircleImageView profileImage;
+    @BindView(R.id.add_photo_iv)
+    ImageView addPhotoIv;
+    @BindView(R.id.constraint_layout_cell)
+    ConstraintLayout constraintLayout;
+
+    private Uri uriPhoto;
+    private File photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,99 +49,47 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        mChart.setViewPortOffsets(0, 0, 0, 0);
-        mChart.setBackgroundColor(Color.rgb(104, 241, 175));
-
-        // no description text
-        mChart.getDescription().setEnabled(false);
-
-        // enable touch gestures
-        mChart.setTouchEnabled(true);
-
-        // enable scaling and dragging
-        mChart.setDragEnabled(true);
-        mChart.setScaleEnabled(true);
-
-        mChart.setPinchZoom(false);
-
-        mChart.setDrawGridBackground(false);
-        mChart.setMaxHighlightDistance(300);
-
-        XAxis x = mChart.getXAxis();
-        x.setEnabled(true);
-
-        YAxis y = mChart.getAxisLeft();
-        y.setLabelCount(6, false);
-        y.setTextColor(Color.WHITE);
-        y.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        y.setDrawGridLines(false);
-        y.setAxisLineColor(Color.WHITE);
-
-        mChart.getAxisRight().setEnabled(false);
-
-        // add data
-        setData(45, 100);
-
-        mChart.getLegend().setEnabled(true);
-
-        mChart.animateXY(2000, 2000);
-
-        // dont forget to refresh the drawing
-        mChart.invalidate();
-
-        batteryLevel.setImageDrawable(getDrawable(R.drawable.ic_battery_10));
+        addPhotoIv.setOnClickListener((View) -> {
+            if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT);
+            } else {
+                initCameraPhoto();
+            }
+        });
     }
 
-    private void setData(int count, float range) {
+    private void initCameraPhoto() {
+        String photoPath = getExternalFilesDir(Environment.DIRECTORY_PICTURES) + getPhotoCode() + ".jpg";
+        photo = new File(photoPath);
 
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
-
-        for (int i = 0; i < count; i++) {
-            float mult = (range + 1);
-            float val = (float) (Math.random() * mult) + 20;// + (float)
-            // ((mult *
-            // 0.1) / 10);
-            yVals.add(new Entry(i, val));
+        try {
+            photo.createNewFile();
+            uriPhoto = FileProvider.getUriForFile(this, "adriancardenas.com.ehealth", photo);
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriPhoto);
+            startActivityForResult(cameraIntent, Constants.REQUEST_TAKE_PHOTO_RESULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("*ERROR*", "failed to create a file photo");
         }
 
-        LineDataSet set1;
 
-        if (mChart.getData() != null &&
-                mChart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet)mChart.getData().getDataSetByIndex(0);
-            set1.setValues(yVals);
-            mChart.getData().notifyDataChanged();
-            mChart.notifyDataSetChanged();
-        } else {
-            // create a dataset and give it a type
-            set1 = new LineDataSet(yVals, "DataSet 1");
+    }
 
-            set1.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-            set1.setCubicIntensity(0.2f);
-            //set1.setDrawFilled(true);
-            set1.setDrawCircles(false);
-            set1.setLineWidth(1.8f);
-            set1.setCircleRadius(4f);
-            set1.setCircleColor(Color.WHITE);
-            set1.setHighLightColor(Color.rgb(244, 117, 117));
-            set1.setColor(Color.WHITE);
-            set1.setFillColor(Color.WHITE);
-            set1.setFillAlpha(100);
-            set1.setDrawHorizontalHighlightIndicator(false);
-            set1.setFillFormatter(new IFillFormatter() {
-                @Override
-                public float getFillLinePosition(ILineDataSet dataSet, LineDataProvider dataProvider) {
-                    return -10;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_TAKE_PHOTO_RESULT) {
+            if (resultCode == RESULT_CANCELED) {
+                Utils.showSnackbar(constraintLayout, getResources().getString(R.string.error_take_photo));
+            } else {
+                if (uriPhoto != null && uriPhoto.getPath().contains("jpg")) {
+                    Glide.with(getApplicationContext()).load(uriPhoto).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(profileImage);
+                    uriPhoto = null;
+                } else {
+                    Utils.showSnackbar(constraintLayout, getResources().getString(R.string.error_take_photo));
                 }
-            });
-
-            // create a data object with the datasets
-            LineData data = new LineData(set1);
-            data.setValueTextSize(9f);
-            data.setDrawValues(false);
-
-            // set data
-            mChart.setData(data);
+            }
         }
     }
 }

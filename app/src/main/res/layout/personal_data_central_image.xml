@@ -2,7 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraint_layout_cell">
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
@@ -65,11 +66,14 @@
         app:layout_constraintCircleRadius="90dp"
         app:layout_constraintCircleAngle="300"/>
 
-
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/cubic_chart"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:visibility="gone"/>
+    <ImageView
+        android:id="@+id/add_photo_iv"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_add_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/profile_image" />
 
 </android.support.constraint.ConstraintLayout>

@@ -9,6 +9,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by AdrianCardenasJimene on 16/03/2018.
  */
@@ -64,5 +67,11 @@ public class Utils {
             // Permission is not granted
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
+    }
+
+    public static String getPhotoCode() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+        String date = dateFormat.format(new Date());
+        return "IMG_"+date;
     }
 }
