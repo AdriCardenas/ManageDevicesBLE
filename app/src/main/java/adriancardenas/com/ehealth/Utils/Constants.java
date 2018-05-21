@@ -21,5 +21,10 @@ public class Constants {
     public static final int SCAN_PERIOD = 20000;
 
     public static final String LOCAL_PATH_PHOTOS = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ehealth/images/";
+    public static final String LOCAL_APPLICATION_PATH = "adriancardenas.com.ehealth";
+
+    public static final String PHOTO = "profile_photo";
+    public static final String DEVICE = "device";
+    public static final String EXTRA_DEVICE = "extra_device";
 
 }

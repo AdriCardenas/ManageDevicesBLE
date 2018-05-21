@@ -16,22 +16,24 @@ import android.widget.TextView;
 
 import adriancardenas.com.ehealth.MainActivity;
 import adriancardenas.com.ehealth.R;
+import adriancardenas.com.ehealth.Utils.Constants;
+import adriancardenas.com.ehealth.Utils.GattManager;
 import adriancardenas.com.ehealth.Utils.Utils;
 import adriancardenas.com.ehealth.model.BluetoothLowEnergyDevice;
-import butterknife.OnClick;
+
+import static adriancardenas.com.ehealth.Utils.GattManager.bluetoothGatt;
+import static adriancardenas.com.ehealth.Utils.GattManager.device;
 
 /**
  * Created by Adrian on 21/04/2018.
  */
 
-public class ScanDeviceViewHolder extends RecyclerView.ViewHolder{
-    ProgressBar signalBar;
-    TextView deviceName;
-    TextView addressDevice;
-    View rootCell;
-    Context context;
-    private BluetoothLowEnergyDevice device;
-    private BluetoothGatt bluetoothGatt;
+public class ScanDeviceViewHolder extends RecyclerView.ViewHolder {
+    private ProgressBar signalBar;
+    private TextView deviceName;
+    private TextView addressDevice;
+    private View rootCell;
+    private Context context;
 
     public ScanDeviceViewHolder(View itemView) {
         super(itemView);
@@ -42,20 +44,19 @@ public class ScanDeviceViewHolder extends RecyclerView.ViewHolder{
         context = itemView.getContext();
     }
 
-    public void bind(BluetoothLowEnergyDevice bluetoothDevice, BluetoothAdapter bluetoothAdapter){
+    public void bind(BluetoothLowEnergyDevice bluetoothDevice, BluetoothAdapter bluetoothAdapter) {
         device = bluetoothDevice;
         deviceName.setText(device.getName());
         addressDevice.setText(device.getAddress());
         signalBar.setVisibility(View.VISIBLE);
         signalBar.setProgress(getIntensity(device.getRssi()));
-        rootCell.setOnClickListener((View)->{
+        rootCell.setOnClickListener((View) -> {
             Log.v("test", "Connecting to " + device.getAddress());
             Log.v("test", "Device name " + bluetoothDevice.getName());
 
             bluetoothGatt = device.getBluetoothDevice().connectGatt(context, true, bluetoothGattCallback);
         });
     }
-
 
     final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
 
@@ -140,7 +141,7 @@ public class ScanDeviceViewHolder extends RecyclerView.ViewHolder{
         bluetoothGatt.disconnect();
     }
 
-    private int getIntensity(int rssi){
-        return 5000/(rssi*-1);
+    private int getIntensity(int rssi) {
+        return 5000 / (rssi * -1);
     }
 }

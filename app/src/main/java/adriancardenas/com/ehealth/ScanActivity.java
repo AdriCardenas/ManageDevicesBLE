@@ -1,7 +1,10 @@
 package adriancardenas.com.ehealth;
 
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
@@ -27,6 +30,7 @@ import java.util.List;
 
 import adriancardenas.com.ehealth.Adapters.ScanAdapter;
 import adriancardenas.com.ehealth.Utils.Constants;
+import adriancardenas.com.ehealth.Utils.GattManager;
 import adriancardenas.com.ehealth.Utils.Utils;
 import adriancardenas.com.ehealth.model.BluetoothLowEnergyDevice;
 import butterknife.BindView;
@@ -191,5 +195,90 @@ public class ScanActivity extends AppCompatActivity {
                 Utils.showSnackbar(constraintLayout, getResources().getString(R.string.request_activate_bluetooth));
             }
         }
+    }
+
+    final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
+
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            super.onConnectionStateChange(gatt, status, newState);
+            Log.v("test", "onConnectionStateChange");
+
+            if (newState == BluetoothProfile.STATE_CONNECTED) {
+                stateConnected();
+                Utils.showSnackbar(constraintLayout, "Connected");
+            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                stateDisconnected();
+            }
+
+        }
+//
+//        @Override
+//        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+//            super.onServicesDiscovered(gatt, status);
+//            Log.v("test", "onServicesDiscovered");
+//        }
+//
+//        @Override
+//        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+//            super.onCharacteristicRead(gatt, characteristic, status);
+//            Log.v("test", "onCharacteristicRead");
+//            byte[] data = characteristic.getValue();
+//        }
+//
+//        @Override
+//        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+//            super.onCharacteristicWrite(gatt, characteristic, status);
+//            Log.v("test", "onCharacteristicWrite");
+//        }
+//
+//        @Override
+//        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+//            super.onCharacteristicChanged(gatt, characteristic);
+//            Log.v("test", "onCharacteristicChanged");
+//            byte[] data = characteristic.getValue();
+//        }
+//
+//        @Override
+//        public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+//            super.onDescriptorRead(gatt, descriptor, status);
+//            Log.v("test", "onDescriptorRead");
+//        }
+//
+//        @Override
+//        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+//            super.onDescriptorWrite(gatt, descriptor, status);
+//            Log.v("test", "onDescriptorWrite");
+//        }
+//
+//        @Override
+//        public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
+//            super.onReliableWriteCompleted(gatt, status);
+//            Log.v("test", "onReliableWriteCompleted");
+//        }
+//
+//        @Override
+//        public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+//            super.onReadRemoteRssi(gatt, rssi, status);
+//            Log.v("test", "onReadRemoteRssi");
+//        }
+//
+//        @Override
+//        public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+//            super.onMtuChanged(gatt, mtu, status);
+//            Log.v("test", "onMtuChanged");
+//        }
+    };
+
+    void stateConnected() {
+        GattManager.bluetoothGatt.discoverServices();
+    }
+
+    void stateDisconnected() {
+        GattManager.bluetoothGatt.disconnect();
+    }
+
+    private int getIntensity(int rssi) {
+        return 5000 / (rssi * -1);
     }
 }

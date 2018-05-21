@@ -1,7 +1,9 @@
 package adriancardenas.com.ehealth;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
@@ -23,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 
 import adriancardenas.com.ehealth.Utils.Constants;
+import adriancardenas.com.ehealth.Utils.GattManager;
 import adriancardenas.com.ehealth.Utils.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     ImageView addPhotoIv;
     @BindView(R.id.constraint_layout_cell)
     ConstraintLayout constraintLayout;
+    @BindView(R.id.personal_height)
+    TextView personalHeight;
+
 
     private Uri uriPhoto;
     private File photo;
@@ -49,9 +56,23 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        personalHeight.setText(GattManager.device.getAddress());
+
+        initProfilePhoto();
+    }
+
+    private void initProfilePhoto() {
+        SharedPreferences sharedPref = getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
+        String url = sharedPref.getString(Constants.PHOTO,"");
+
+        if(!url.equals("")){
+            Glide.with(getApplicationContext()).load(url).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(profileImage);
+        }
+
         addPhotoIv.setOnClickListener((View) -> {
             if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT);
+                initCameraPhoto();
             } else {
                 initCameraPhoto();
             }
@@ -84,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
                 Utils.showSnackbar(constraintLayout, getResources().getString(R.string.error_take_photo));
             } else {
                 if (uriPhoto != null && uriPhoto.getPath().contains("jpg")) {
+                    SharedPreferences sharedPref = getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(Constants.PHOTO,uriPhoto.toString());
+                    editor.commit();
+
                     Glide.with(getApplicationContext()).load(uriPhoto).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(profileImage);
                     uriPhoto = null;
                 } else {
