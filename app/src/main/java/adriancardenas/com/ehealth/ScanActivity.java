@@ -65,7 +65,7 @@ public class ScanActivity extends AppCompatActivity {
         deviceAddressList = new ArrayList<>();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        scanAdapter = new ScanAdapter(deviceList, this);
+        scanAdapter = new ScanAdapter(deviceList, this, mBluetoothAdapter);
         recyclerView.setAdapter(scanAdapter);
 
         BluetoothManager mBluetoothManager = (BluetoothManager) this.getSystemService(this.BLUETOOTH_SERVICE);

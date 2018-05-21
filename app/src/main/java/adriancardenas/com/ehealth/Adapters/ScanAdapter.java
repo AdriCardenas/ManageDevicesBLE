@@ -1,6 +1,7 @@
 package adriancardenas.com.ehealth.Adapters;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -26,8 +27,10 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanDeviceViewHolder> {
     private List<BluetoothLowEnergyDevice> deviceList;
     private int lastPosition;
     private Context context;
+    BluetoothAdapter bluetoothAdapter;
 
-    public ScanAdapter(List<BluetoothLowEnergyDevice> list, Context context) {
+    public ScanAdapter(List<BluetoothLowEnergyDevice> list, Context context, BluetoothAdapter bluetoothAdapter) {
+        this.bluetoothAdapter = bluetoothAdapter;
         deviceList = list;
         lastPosition = -1;
         this.context = context;
@@ -48,7 +51,7 @@ public class ScanAdapter extends RecyclerView.Adapter<ScanDeviceViewHolder> {
 
     @Override
     public void onBindViewHolder(ScanDeviceViewHolder holder, int position) {
-        holder.bind(deviceList.get(position));
+        holder.bind(deviceList.get(position), bluetoothAdapter);
         setAnimation(holder.itemView, position);
     }
 

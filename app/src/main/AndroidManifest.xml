@@ -34,8 +34,7 @@
         </activity>
         <activity android:name=".ScanActivity" />
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/ThemeNoActionBar"/>
+            android:name=".MainActivity"/>
         <provider
             android:name=".GenericFileProvider"
             android:authorities="${applicationId}"
