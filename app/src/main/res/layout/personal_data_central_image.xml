@@ -14,8 +14,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/profile_default"
-        app:civ_border_color="@color/black"
-        app:civ_border_width="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,5 +73,24 @@
         android:src="@drawable/ic_add_photo"
         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="@+id/profile_image" />
+
+    <ImageView
+        android:id="@+id/battery_lvl_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_battery_10"
+        app:layout_constraintEnd_toStartOf="@+id/battery_lvl_tv"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/battery_lvl_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="99%"
+        app:layout_constraintBottom_toBottomOf="@+id/battery_lvl_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/battery_lvl_iv" />
 
 </android.support.constraint.ConstraintLayout>

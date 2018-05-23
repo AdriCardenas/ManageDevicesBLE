@@ -87,6 +87,7 @@ public class ScanDeviceViewHolder extends RecyclerView.ViewHolder {
             super.onCharacteristicRead(gatt, characteristic, status);
             Log.v("test", "onCharacteristicRead");
             byte[] data = characteristic.getValue();
+            GattManager.battery = data;
         }
 
         @Override

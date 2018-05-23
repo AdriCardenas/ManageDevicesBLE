@@ -1,6 +1,11 @@
 package adriancardenas.com.ehealth;
 
 import android.Manifest;
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCallback;
+import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -44,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
     ConstraintLayout constraintLayout;
     @BindView(R.id.personal_height)
     TextView personalHeight;
+    @BindView(R.id.battery_lvl_tv)
+    TextView batteryLvlTv;
+    @BindView(R.id.battery_lvl_iv)
+    ImageView batteryLvlIv;
 
 
     private Uri uriPhoto;
@@ -56,16 +65,15 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        personalHeight.setText(GattManager.device.getAddress());
-
         initProfilePhoto();
+        updateBatteryLevelIv(GattManager.battery[1]);
     }
 
     private void initProfilePhoto() {
         SharedPreferences sharedPref = getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
-        String url = sharedPref.getString(Constants.PHOTO,"");
+        String url = sharedPref.getString(Constants.PHOTO, "");
 
-        if(!url.equals("")){
+        if (!url.equals("")) {
             Glide.with(getApplicationContext()).load(url).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(profileImage);
         }
 
@@ -93,9 +101,8 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Log.e("*ERROR*", "failed to create a file photo");
         }
-
-
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -107,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 if (uriPhoto != null && uriPhoto.getPath().contains("jpg")) {
                     SharedPreferences sharedPref = getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(Constants.PHOTO,uriPhoto.toString());
+                    editor.putString(Constants.PHOTO, uriPhoto.toString());
                     editor.commit();
 
                     Glide.with(getApplicationContext()).load(uriPhoto).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(profileImage);
@@ -116,6 +123,30 @@ public class MainActivity extends AppCompatActivity {
                     Utils.showSnackbar(constraintLayout, getResources().getString(R.string.error_take_photo));
                 }
             }
+        }
+    }
+
+
+
+    private void updateBatteryLevelIv(int batteryLevel) {
+        if(batteryLevel<10){
+            batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_10));
+        }else if(batteryLevel<20){
+            batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_20));
+        }else if(batteryLevel<30){
+            batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_30));
+        }else if(batteryLevel<50){
+            batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_50));
+        }else if(batteryLevel<60){
+            batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_60));
+        }else if(batteryLevel<80){
+            batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_80));
+        }else if(batteryLevel<90){
+            batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_80));
+        }else if(batteryLevel<100){
+            batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_90));
+        }else if(batteryLevel==100){
+            batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_100));
         }
     }
 }
