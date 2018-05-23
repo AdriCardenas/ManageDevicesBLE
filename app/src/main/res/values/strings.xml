@@ -13,4 +13,5 @@
     <string name="weight">Weight</string>
     <string name="height">Height</string>
     <string name="error_take_photo">Error taking a photo</string>
+    <string name="empty_scan_data">No data available</string>
 </resources>

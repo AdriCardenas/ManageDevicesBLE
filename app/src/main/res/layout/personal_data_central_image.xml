@@ -23,24 +23,20 @@
         android:id="@+id/personal_height"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/height"
+        android:text="175cm"
         app:layout_constraintCircle="@id/profile_image"
-        app:layout_constraintCircleRadius="90dp"
-        app:layout_constraintCircleAngle="60"
-        android:padding="2dp"
-        android:textColor="@color/white"
-        android:background="@color/colorPrimary"/>
+        app:layout_constraintCircleRadius="140dp"
+        app:layout_constraintCircleAngle="75"
+        android:padding="2dp"/>
 
     <TextView
         android:id="@+id/personal_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/weight"
+        android:text="70kg"
         app:layout_constraintCircle="@id/profile_image"
-        app:layout_constraintCircleRadius="90dp"
-        app:layout_constraintCircleAngle="120"
-        android:textColor="@color/white"
-        android:background="@color/colorPrimary"/>
+        app:layout_constraintCircleRadius="140dp"
+        app:layout_constraintCircleAngle="105"/>
 
     <TextView
         android:id="@+id/personal_distance_mean"
@@ -48,28 +44,23 @@
         android:layout_height="wrap_content"
         android:text="@string/distance_mean"
         app:layout_constraintCircle="@id/profile_image"
-        app:layout_constraintCircleRadius="90dp"
-        app:layout_constraintCircleAngle="240"
-        android:textColor="@color/white"
-        android:background="@color/colorPrimary"/>
+        app:layout_constraintCircleRadius="140dp"
+        app:layout_constraintCircleAngle="255"/>
 
     <TextView
         android:id="@+id/personal_steps_mean"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/steps_mean"
-        android:textColor="@color/white"
-        android:background="@color/colorPrimary"
         app:layout_constraintCircle="@id/profile_image"
-        app:layout_constraintCircleRadius="90dp"
-        app:layout_constraintCircleAngle="300"/>
+        app:layout_constraintCircleRadius="140dp"
+        app:layout_constraintCircleAngle="285"/>
 
     <ImageView
         android:id="@+id/add_photo_iv"
         android:layout_width="50dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
         android:src="@drawable/ic_add_photo"
         app:layout_constraintBottom_toBottomOf="@+id/profile_image"
         app:layout_constraintEnd_toEndOf="@+id/profile_image" />
@@ -79,6 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         android:src="@drawable/ic_battery_10"
         app:layout_constraintEnd_toStartOf="@+id/battery_lvl_tv"
         app:layout_constraintTop_toTopOf="parent" />
@@ -87,7 +79,9 @@
         android:id="@+id/battery_lvl_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:visibility="gone"
         android:text="99%"
         app:layout_constraintBottom_toBottomOf="@+id/battery_lvl_iv"
         app:layout_constraintEnd_toEndOf="parent"

@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +34,18 @@ import adriancardenas.com.ehealth.Utils.Constants;
 import adriancardenas.com.ehealth.Utils.GattManager;
 import adriancardenas.com.ehealth.Utils.Utils;
 import adriancardenas.com.ehealth.model.BluetoothLowEnergyDevice;
+import adriancardenas.com.ehealth.model.ScanItemListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static adriancardenas.com.ehealth.Utils.Constants.REQUEST_BLUETOOTH_ENABLE_CODE;
 
-public class ScanActivity extends AppCompatActivity {
+public class ScanActivity extends AppCompatActivity implements ScanItemListener {
 
-//    @BindView(R.id.placeholder)
+    //    @BindView(R.id.placeholder)
 //    Placeholder placeholder;
+    @BindView(R.id.empty_scan_tv)
+    TextView emptyTvScan;
     @BindView(R.id.scan_button)
     Button scanButton;
     @BindView(R.id.progress_bar_scan)
@@ -68,14 +72,14 @@ public class ScanActivity extends AppCompatActivity {
         deviceList = new ArrayList<BluetoothLowEnergyDevice>();
         deviceAddressList = new ArrayList<>();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        scanAdapter = new ScanAdapter(deviceList, this, mBluetoothAdapter);
-        recyclerView.setAdapter(scanAdapter);
-
         BluetoothManager mBluetoothManager = (BluetoothManager) this.getSystemService(this.BLUETOOTH_SERVICE);
         mBluetoothAdapter = mBluetoothManager.getAdapter();
 
         Utils.checkBluetoothPermission(this);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        scanAdapter = new ScanAdapter(deviceList, this, this);
+        recyclerView.setAdapter(scanAdapter);
 
         scanButton.setOnClickListener((View v) -> {
             //swapItem(v);
@@ -88,6 +92,7 @@ public class ScanActivity extends AppCompatActivity {
             } else {
                 checkBluetoothIsOn();
                 if (mBluetoothAdapter != null) {
+                    emptyTvScan.setVisibility(View.VISIBLE);
                     isScanning = true;
                     progressBar.setVisibility(View.VISIBLE);
                     scanButton.setText(getResources().getString(R.string.stop_scan));
@@ -95,8 +100,8 @@ public class ScanActivity extends AppCompatActivity {
                     deviceAddressList.clear();
                     scanAdapter.notifyDataSetChanged();
                     startScanning(isScanning);
-                }else{
-                    Utils.showSnackbar(constraintLayout,getResources().getString(R.string.request_activate_bluetooth));
+                } else {
+                    Utils.showSnackbar(constraintLayout, getResources().getString(R.string.request_activate_bluetooth));
                 }
             }
         });
@@ -125,6 +130,10 @@ public class ScanActivity extends AppCompatActivity {
     }
 
     private void stopScanning() {
+        stopLeScanner();
+    }
+
+    private void stopLeScanner() {
         bluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
         bluetoothLeScanner.stopScan(scanCallback);
     }
@@ -164,7 +173,9 @@ public class ScanActivity extends AppCompatActivity {
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
             BluetoothLowEnergyDevice bluetoothDevice = new BluetoothLowEnergyDevice(result.getDevice(), result.getRssi());
-            if (!deviceAddressList.contains(bluetoothDevice.getAddress())) {
+            if (bluetoothDevice.getName() != null && !bluetoothDevice.getName().equals("")
+                    && !deviceAddressList.contains(bluetoothDevice.getAddress())) {
+                emptyTvScan.setVisibility(View.GONE);
                 deviceList.add(bluetoothDevice);
                 deviceAddressList.add(bluetoothDevice.getAddress());
                 scanAdapter.notifyDataSetChanged();
@@ -197,88 +208,8 @@ public class ScanActivity extends AppCompatActivity {
         }
     }
 
-    final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
-
-        @Override
-        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            super.onConnectionStateChange(gatt, status, newState);
-            Log.v("test", "onConnectionStateChange");
-
-            if (newState == BluetoothProfile.STATE_CONNECTED) {
-                stateConnected();
-                Utils.showSnackbar(constraintLayout, "Connected");
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                stateDisconnected();
-            }
-
-        }
-//
-//        @Override
-//        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-//            super.onServicesDiscovered(gatt, status);
-//            Log.v("test", "onServicesDiscovered");
-//        }
-//
-//        @Override
-//        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-//            super.onCharacteristicRead(gatt, characteristic, status);
-//            Log.v("test", "onCharacteristicRead");
-//            byte[] data = characteristic.getValue();
-//        }
-//
-//        @Override
-//        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-//            super.onCharacteristicWrite(gatt, characteristic, status);
-//            Log.v("test", "onCharacteristicWrite");
-//        }
-//
-//        @Override
-//        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-//            super.onCharacteristicChanged(gatt, characteristic);
-//            Log.v("test", "onCharacteristicChanged");
-//            byte[] data = characteristic.getValue();
-//        }
-//
-//        @Override
-//        public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-//            super.onDescriptorRead(gatt, descriptor, status);
-//            Log.v("test", "onDescriptorRead");
-//        }
-//
-//        @Override
-//        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-//            super.onDescriptorWrite(gatt, descriptor, status);
-//            Log.v("test", "onDescriptorWrite");
-//        }
-//
-//        @Override
-//        public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
-//            super.onReliableWriteCompleted(gatt, status);
-//            Log.v("test", "onReliableWriteCompleted");
-//        }
-//
-//        @Override
-//        public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
-//            super.onReadRemoteRssi(gatt, rssi, status);
-//            Log.v("test", "onReadRemoteRssi");
-//        }
-//
-//        @Override
-//        public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
-//            super.onMtuChanged(gatt, mtu, status);
-//            Log.v("test", "onMtuChanged");
-//        }
-    };
-
-    void stateConnected() {
-        GattManager.bluetoothGatt.discoverServices();
-    }
-
-    void stateDisconnected() {
-        GattManager.bluetoothGatt.disconnect();
-    }
-
-    private int getIntensity(int rssi) {
-        return 5000 / (rssi * -1);
+    @Override
+    public void onClickScanItem() {
+        stopLeScanner();
     }
 }

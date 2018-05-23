@@ -19,6 +19,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,6 +30,8 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.UUID;
 
 import adriancardenas.com.ehealth.Utils.Constants;
 import adriancardenas.com.ehealth.Utils.GattManager;
@@ -38,6 +41,8 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static adriancardenas.com.ehealth.Utils.Constants.WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT;
+import static adriancardenas.com.ehealth.Utils.GattManager.bluetoothGatt;
+import static adriancardenas.com.ehealth.Utils.GattManager.device;
 import static adriancardenas.com.ehealth.Utils.Utils.getPhotoCode;
 
 public class MainActivity extends AppCompatActivity {
@@ -65,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        bluetoothGatt = device.getBluetoothDevice().connectGatt(this, true, bluetoothGattCallback);
+
         initProfilePhoto();
-        updateBatteryLevelIv(GattManager.battery[1]);
     }
 
     private void initProfilePhoto() {
@@ -127,26 +133,140 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void updateBatteryLevelIv(int batteryLevel) {
-        if(batteryLevel<10){
+        if (batteryLevel < 10) {
             batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_10));
-        }else if(batteryLevel<20){
+        } else if (batteryLevel < 20) {
             batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_20));
-        }else if(batteryLevel<30){
+        } else if (batteryLevel < 30) {
             batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_30));
-        }else if(batteryLevel<50){
+        } else if (batteryLevel < 50) {
             batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_50));
-        }else if(batteryLevel<60){
+        } else if (batteryLevel < 60) {
             batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_60));
-        }else if(batteryLevel<80){
+        } else if (batteryLevel < 80) {
             batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_80));
-        }else if(batteryLevel<90){
+        } else if (batteryLevel < 90) {
             batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_80));
-        }else if(batteryLevel<100){
+        } else if (batteryLevel < 100) {
             batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_90));
-        }else if(batteryLevel==100){
+        } else if (batteryLevel == 100) {
             batteryLvlIv.setImageDrawable(getDrawable(R.drawable.ic_battery_100));
         }
+    }
+
+    void stateConnected() {
+        bluetoothGatt.discoverServices();
+    }
+
+    void stateDisconnected() {
+        bluetoothGatt.disconnect();
+    }
+
+    final BluetoothGattCallback bluetoothGattCallback = new BluetoothGattCallback() {
+
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            super.onConnectionStateChange(gatt, status, newState);
+            Log.v("test", "onConnectionStateChange");
+
+            if (newState == BluetoothProfile.STATE_CONNECTED) {
+                stateConnected();
+            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                stateDisconnected();
+            }
+
+        }
+
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            super.onServicesDiscovered(gatt, status);
+            Log.v("test", "onServicesDiscovered");
+            getBatteryStatus();
+        }
+
+        @Override
+        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            super.onCharacteristicRead(gatt, characteristic, status);
+            Log.v("test", "onCharacteristicRead");
+            byte[] data = characteristic.getValue();
+            UUID uuid = characteristic.getUuid();
+            if (uuid.equals(Constants.Basic.batteryCharacteristic)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        batteryLvlIv.setVisibility(View.VISIBLE);
+                        batteryLvlTv.setVisibility(View.VISIBLE);
+                        String str = String.valueOf(data[1]);
+                        batteryLvlTv.setText(str+"%");
+                        updateBatteryLevelIv(data[1]);
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            super.onCharacteristicWrite(gatt, characteristic, status);
+            Log.v("test", "onCharacteristicWrite");
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            super.onCharacteristicChanged(gatt, characteristic);
+            Log.v("test", "onCharacteristicChanged");
+            byte[] data = characteristic.getValue();
+            if (characteristic.getUuid().equals(Constants.Basic.batteryCharacteristic)) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        batteryLvlIv.setVisibility(View.VISIBLE);
+                        batteryLvlTv.setVisibility(View.VISIBLE);
+                        String str = String.valueOf(data[1]);
+                        batteryLvlTv.setText(str+"%");
+                        updateBatteryLevelIv(data[1]);
+                    }
+                });
+            }
+        }
+
+        @Override
+        public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+            super.onDescriptorRead(gatt, descriptor, status);
+            Log.v("test", "onDescriptorRead");
+        }
+
+        @Override
+        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+            super.onDescriptorWrite(gatt, descriptor, status);
+            Log.v("test", "onDescriptorWrite");
+        }
+
+        @Override
+        public void onReliableWriteCompleted(BluetoothGatt gatt, int status) {
+            super.onReliableWriteCompleted(gatt, status);
+            Log.v("test", "onReliableWriteCompleted");
+        }
+
+        @Override
+        public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
+            super.onReadRemoteRssi(gatt, rssi, status);
+            Log.v("test", "onReadRemoteRssi");
+        }
+
+        @Override
+        public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+            super.onMtuChanged(gatt, mtu, status);
+            Log.v("test", "onMtuChanged");
+        }
+    };
+
+    void getBatteryStatus() {
+        BluetoothGattCharacteristic bchar = bluetoothGatt.getService(Constants.Basic.service)
+                .getCharacteristic(Constants.Basic.batteryCharacteristic);
+        if (!bluetoothGatt.readCharacteristic(bchar)) {
+            Utils.showSnackbar(constraintLayout, "Failed get battery info");
+        }
+
     }
 }
