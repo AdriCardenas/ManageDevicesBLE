@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="stop_scan">Parar</string>
+    <string name="start_scan">Escanear</string>
+    <string name="request_activate_bluetooth">Por favor, activa el bluetooth</string>
+    <string name="distance_mean">Distancia media</string>
+    <string name="steps_mean">Media de pasos</string>
+    <string name="weight">Peso</string>
+    <string name="height">Altura</string>
+    <string name="error_take_photo">Error al tomar una foto</string>
+    <string name="empty_scan_data">No hay datos disponibles</string>
+    <string name="your_daily_info">Información diaria</string>
+    <string name="steps_daily_title">Pasos hoy:</string>
+    <string name="distance_daily_title">Distancia recorrida hoy:</string>
+    <string name="calorie_daily_title">Calorias</string>
+    <string name="age">Edad</string>
+    <string name="introduce_age">Introduce tu edad</string>
+    <string name="introduce_weight">Introduce tu peso</string>
+    <string name="introduce_steps_goal">Objetivo de pasos</string>
+    <string name="introduce_name">Introduce tu nombre</string>
+    <string name="name">Nombre</string>
+    <string name="introduce_steps_goal_error">Introduce un objetivo de pasos</string>
+    <string name="welcome">Bienvenido</string>
+</resources>

@@ -27,8 +27,10 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/ripple_effect"
         android:text="@string/start_scan"
-        android:textColor="@color/cardview_light_background"
+        android:textColor="@color/white"
         android:textSize="@dimen/text_button"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

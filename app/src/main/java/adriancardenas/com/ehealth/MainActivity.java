@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences sharedPref = getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putString(Constants.PHOTO, uriPhoto.toString());
-                    editor.commit();
+                    editor.apply();
 
                     Glide.with(getApplicationContext()).load(uriPhoto).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(profileImage);
                     uriPhoto = null;
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
             Log.v("test", "onCharacteristicRead");
             byte[] data = characteristic.getValue();
             UUID uuid = characteristic.getUuid();
-            if (data !=null  && uuid.equals(Constants.Basic.BATTERY_CHARASTERISTIC)) {
+            if (data != null && uuid.equals(Constants.Basic.BATTERY_CHARASTERISTIC)) {
                 runOnUiThread(() -> {
                     batteryLvlIv.setVisibility(View.VISIBLE);
                     batteryLvlTv.setVisibility(View.VISIBLE);
@@ -204,14 +204,14 @@ public class MainActivity extends AppCompatActivity {
                     updateBatteryLevelIv(data[1]);
                     getRealTimeSteps();
                 });
-            } else if (data !=null && characteristic.getUuid().equals(Constants.Basic.REALTIME_STEPS_CHARACTERISTIC)) {
+            } else if (data != null && characteristic.getUuid().equals(Constants.Basic.REALTIME_STEPS_CHARACTERISTIC)) {
                 runOnUiThread(() -> {
                     String calories = getDataValue(data, 9, 11);
                     String distance = getDataValue(data, 5, 8);
                     String steps = getDataValue(data, 1, 4);
                     stepsTodayTv.setText(steps);
-                    distanceTodayTv.setText(distance+"m");
-                    caloriesTodayTv.setText(calories+"cal");
+                    distanceTodayTv.setText(distance + "m");
+                    caloriesTodayTv.setText(calories + "cal");
                 });
             } else if (characteristic.getUuid().equals(Constants.Basic.ACTIVITY_DATA_CHARASTERISTIC)) {
 
@@ -243,8 +243,8 @@ public class MainActivity extends AppCompatActivity {
                 String distance = getDataValue(data, 5, 8);
                 String steps = getDataValue(data, 1, 4);
                 stepsTodayTv.setText(steps);
-                distanceTodayTv.setText(distance+"m");
-                caloriesTodayTv.setText(calories+"cal");
+                distanceTodayTv.setText(distance + "m");
+                caloriesTodayTv.setText(calories + "cal");
                 getActivityData();
             } else if (characteristic.getUuid().equals(Constants.Basic.ACTIVITY_DATA_CHARASTERISTIC)) {
 
@@ -286,7 +286,14 @@ public class MainActivity extends AppCompatActivity {
     private String getDataValue(byte[] data, int initialPos, int finalPos) {
         int value = 0;
         if (data != null) {
-            value = Math.abs(data[initialPos]);
+            data[initialPos] = -3;
+            if (data[initialPos] < 0) {
+                String thisByte = String.format("%x", data[initialPos]);
+                value = Integer.parseInt(thisByte);
+            } else {
+                value = Math.abs(data[initialPos]);
+            }
+
         }
 
         if (data[initialPos + 1] != 0) {

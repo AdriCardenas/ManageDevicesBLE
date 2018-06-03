@@ -27,6 +27,11 @@ public class Constants {
 
     public static final String PHOTO = "profile_photo";
     public static final String EXTRA_DEVICE = "extra_device";
+    public static final String NAME = "user_name";
+    public static final String AGE = "user_age";
+    public static final String WEIGHT = "user_weight";
+    public static final String STEPS_GOAL = "user_steps_goal";
+    public static final String IS_CONFIGURED = "is_configured";
 
     public static class Basic {
         public static UUID service = UUID.fromString("0000fee0-0000-1000-8000-00805f9b34fb");

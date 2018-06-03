@@ -63,7 +63,7 @@ public class ScanActivity extends AppCompatActivity implements ScanItemListener 
 
         ButterKnife.bind(this);
 
-        deviceList = new ArrayList<BluetoothLowEnergyDevice>();
+        deviceList = new ArrayList<>();
         deviceAddressList = new ArrayList<>();
 
         BluetoothManager mBluetoothManager = (BluetoothManager) this.getSystemService(this.BLUETOOTH_SERVICE);
@@ -77,6 +77,7 @@ public class ScanActivity extends AppCompatActivity implements ScanItemListener 
 
         scanButton.setOnClickListener((View v) -> {
             //swapItem(v);
+            checkBluetoothIsOn();
             if (isScanning) {
                 isScanning = false;
                 progressBar.setVisibility(View.GONE);

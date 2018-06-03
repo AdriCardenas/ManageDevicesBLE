@@ -1,13 +1,13 @@
 <resources>
-    <string name="app_name">EHealth</string>
+    <string name="app_name" translatable="false">EHealth</string>
 
     <!--Scan Activity-->
     <string name="stop_scan">Stop</string>
     <string name="start_scan">Scan</string>
     <string name="request_activate_bluetooth">Please turn on bluetooth</string>
 
-    <string name="calorie_ab">Cal</string>
-    <string name="kilometer_ab">km</string>
+    <string name="calorie_ab" translatable="false">Cal</string>
+    <string name="kilometer_ab" translatable="false">km</string>
     <string name="distance_mean">Distance Mean</string>
     <string name="steps_mean">Steps Mean</string>
     <string name="weight">Weight</string>
@@ -18,4 +18,12 @@
     <string name="steps_daily_title">Steps today:</string>
     <string name="distance_daily_title">Distance traveled today:</string>
     <string name="calorie_daily_title">Calories:</string>
+    <string name="age">Age</string>
+    <string name="introduce_age">Enter your age</string>
+    <string name="introduce_weight">Enter yout Weight</string>
+    <string name="introduce_steps_goal">Steps goal</string>
+    <string name="introduce_name">Enter your name</string>
+    <string name="name">Name</string>
+    <string name="introduce_steps_goal_error">Enter steps goal</string>
+    <string name="welcome">Welcome</string>
 </resources>
