@@ -37,6 +37,11 @@ public class ConfigurationActivity extends AppCompatActivity {
     @BindView(R.id.steps_daily_user)
     TextInputEditText stepsGoal;
 
+    @BindView(R.id.height_user_layout)
+    TextInputLayout heightUserLayout;
+    @BindView(R.id.height_user)
+    TextInputEditText heightUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +77,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         String goal = stepsGoal.getText().toString();
         String age = ageUser.getText().toString();
         String weight = weightUser.getText().toString();
+        String height = heightUser.getText().toString();
 
         SharedPreferences sharedPref = getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -79,6 +85,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         editor.putString(Constants.AGE, age);
         editor.putString(Constants.STEPS_GOAL, goal);
         editor.putString(Constants.WEIGHT, weight);
+        editor.putString(Constants.HEIGHT, height);
         editor.putBoolean(Constants.IS_CONFIGURED, true);
         editor.apply();
     }
@@ -102,6 +109,11 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         if (stepsGoal.getText() == null || stepsGoal.getText().toString().equals("")) {
             stepsGoalLayout.setError(getString(R.string.introduce_steps_goal_error));
+            correctField = false;
+        }
+
+        if (heightUser.getText() == null || heightUser.getText().toString().equals("")) {
+            heightUserLayout.setError(getString(R.string.introduce_height));
             correctField = false;
         }
         return correctField;

@@ -1,146 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_cell"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/root_cell"
     tools:context=".ConfigurationActivity">
 
-    <TextView
-        android:id="@+id/name_user_title"
-        style="@style/Roboto.ExtraBig"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/introduce_name"
-        app:layout_constraintBottom_toTopOf="@+id/name_user_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/name_user_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        app:counterEnabled="true"
-        app:counterMaxLength="24"
-        app:counterOverflowTextAppearance="@style/TextInput.Error"
-        app:counterTextAppearance="@style/TextInput.Hint"
-        app:layout_constraintBottom_toTopOf="@+id/steps_daily_user_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_user_title">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/name_user"
+        <TextView
+            android:id="@+id/name_user_title"
             style="@style/Roboto.ExtraBig"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:textColorHint="@color/colorPrimaryDark" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/introduce_name"
+            app:layout_constraintBottom_toTopOf="@+id/name_user_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/steps_daily_user_title"
-        style="@style/Roboto.ExtraBig"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/introduce_steps_goal"
-        app:layout_constraintBottom_toTopOf="@+id/steps_daily_user_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_user_layout" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/name_user_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            app:counterEnabled="true"
+            app:counterMaxLength="24"
+            app:counterOverflowTextAppearance="@style/TextInput.Error"
+            app:counterTextAppearance="@style/TextInput.Hint"
+            app:layout_constraintBottom_toTopOf="@+id/steps_daily_user_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_user_title">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/steps_daily_user_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/weight_user_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/steps_daily_user_title">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/name_user"
+                style="@style/Roboto.ExtraBig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:textColorHint="@color/colorPrimaryDark" />
+        </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/steps_daily_user"
+        <TextView
+            android:id="@+id/steps_daily_user_title"
             style="@style/Roboto.ExtraBig"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:textColorHint="@color/colorPrimaryDark" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/introduce_steps_goal"
+            app:layout_constraintBottom_toTopOf="@+id/steps_daily_user_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_user_layout" />
 
-    <TextView
-        android:id="@+id/weight_user_title"
-        style="@style/Roboto.ExtraBig"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/introduce_weight"
-        app:layout_constraintBottom_toTopOf="@+id/weight_user_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/steps_daily_user_layout" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/steps_daily_user_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/weight_user_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/steps_daily_user_title">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/weight_user_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/age_user_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weight_user_title">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/steps_daily_user"
+                style="@style/Roboto.ExtraBig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColorHint="@color/colorPrimaryDark" />
+        </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/weight_user"
+        <TextView
+            android:id="@+id/weight_user_title"
             style="@style/Roboto.ExtraBig"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:textColorHint="@color/colorPrimaryDark" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/introduce_weight"
+            app:layout_constraintBottom_toTopOf="@+id/weight_user_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/steps_daily_user_layout" />
 
-    <TextView
-        android:id="@+id/age_user_title"
-        style="@style/Roboto.ExtraBig"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/introduce_age"
-        app:layout_constraintBottom_toTopOf="@+id/age_user_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weight_user_layout" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/weight_user_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/age_user_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weight_user_title">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/age_user_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/age_user_title">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/weight_user"
+                style="@style/Roboto.ExtraBig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="num"
+                android:textColorHint="@color/colorPrimaryDark" />
+        </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/age_user"
+        <TextView
+            android:id="@+id/age_user_title"
             style="@style/Roboto.ExtraBig"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:textColorHint="@color/colorPrimaryDark" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/introduce_age"
+            app:layout_constraintBottom_toTopOf="@+id/age_user_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/weight_user_layout" />
 
-</android.support.constraint.ConstraintLayout>
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/age_user_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/age_user_title">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/age_user"
+                style="@style/Roboto.ExtraBig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColorHint="@color/colorPrimaryDark" />
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:id="@+id/height_user_title"
+            style="@style/Roboto.ExtraBig"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/introduce_height"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/age_user_layout" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/height_user_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/height_user_title">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/height_user"
+                style="@style/Roboto.ExtraBig"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColorHint="@color/colorPrimaryDark" />
+        </android.support.design.widget.TextInputLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -50,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
     ImageView addPhotoIv;
     @BindView(R.id.constraint_layout_cell)
     ConstraintLayout constraintLayout;
-    @BindView(R.id.personal_height)
-    TextView personalHeight;
+    @BindView(R.id.personal_imc)
+    TextView personalImc;
+    @BindView(R.id.personal_weight)
+    TextView personalWeight;
     @BindView(R.id.battery_lvl_tv)
     TextView batteryLvlTv;
     @BindView(R.id.battery_lvl_iv)
@@ -62,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
     TextView caloriesTodayTv;
     @BindView(R.id.distance_today_tv)
     TextView distanceTodayTv;
+    @BindView(R.id.circular_progress)
+    ProgressBar circularPb;
+    @BindView(R.id.distance_today_iv)
+    ImageView distanceTodayIv;
+    @BindView(R.id.steps_today_iv)
+    ImageView stepsTodayIv;
 
 
     private Uri uriPhoto;
@@ -77,6 +86,20 @@ public class MainActivity extends AppCompatActivity {
         bluetoothGatt = device.getBluetoothDevice().connectGatt(this, true, bluetoothGattCallback);
 
         initProfilePhoto();
+
+        updatePersonalData();
+    }
+
+    private void updatePersonalData() {
+        SharedPreferences sharedPref = getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
+        float weight = Float.parseFloat(sharedPref.getString(Constants.WEIGHT, ""));
+        float height = Float.parseFloat(sharedPref.getString(Constants.HEIGHT, ""));
+
+        personalWeight.setText(String.format("%.1f kg", weight));
+
+        float imc = weight / (height / 100 * height / 100);
+
+        personalImc.setText(String.format("IMC: %.1f", imc));
     }
 
     private void initProfilePhoto() {
@@ -205,14 +228,7 @@ public class MainActivity extends AppCompatActivity {
                     getRealTimeSteps();
                 });
             } else if (data != null && characteristic.getUuid().equals(Constants.Basic.REALTIME_STEPS_CHARACTERISTIC)) {
-                runOnUiThread(() -> {
-                    String calories = getDataValue(data, 9, 11);
-                    String distance = getDataValue(data, 5, 8);
-                    String steps = getDataValue(data, 1, 4);
-                    stepsTodayTv.setText(steps);
-                    distanceTodayTv.setText(distance + "m");
-                    caloriesTodayTv.setText(calories + "cal");
-                });
+                runOnUiThread(() -> updateDailyInfo(data));
             } else if (characteristic.getUuid().equals(Constants.Basic.ACTIVITY_DATA_CHARASTERISTIC)) {
 
             }
@@ -239,13 +255,7 @@ public class MainActivity extends AppCompatActivity {
                     getRealTimeSteps();
                 });
             } else if (characteristic.getUuid().equals(Constants.Basic.REALTIME_STEPS_CHARACTERISTIC)) {
-                String calories = getDataValue(data, 9, 12);
-                String distance = getDataValue(data, 5, 8);
-                String steps = getDataValue(data, 1, 4);
-                stepsTodayTv.setText(steps);
-                distanceTodayTv.setText(distance + "m");
-                caloriesTodayTv.setText(calories + "cal");
-                getActivityData();
+                runOnUiThread(() -> updateDailyInfo(data));
             } else if (characteristic.getUuid().equals(Constants.Basic.ACTIVITY_DATA_CHARASTERISTIC)) {
 
             }
@@ -283,13 +293,43 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private void updateDailyInfo(byte[] data) {
+        String calories = getDataValue(data, 9, 11);
+        String distance = getDataValue(data, 5, 8);
+        String steps = getDataValue(data, 1, 4);
+        SharedPreferences sharedPref = getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
+        String goal = sharedPref.getString(Constants.STEPS_GOAL, "");
+        if (!goal.equals("")) {
+            circularPb.setMax(Integer.parseInt(goal));
+            circularPb.setProgress(Integer.parseInt(steps));
+            circularPb.setVisibility(View.VISIBLE);
+        } else {
+            circularPb.setVisibility(View.INVISIBLE);
+        }
+
+        stepsTodayTv.setText(steps);
+        stepsTodayIv.setVisibility(View.VISIBLE);
+        distanceTodayTv.setText(getFormatDistance(distance));
+        distanceTodayIv.setVisibility(View.VISIBLE);
+        caloriesTodayTv.setText(calories + "cal");
+    }
+
+    private String getFormatDistance(String distance) {
+        String result = distance;
+        float f = Float.parseFloat(distance);
+        if (f > 1000) {
+            f /= 1000;
+            return String.format("%s km", String.format("%.2f", f));
+        }
+        return distance;
+    }
+
     private String getDataValue(byte[] data, int initialPos, int finalPos) {
         int value = 0;
         if (data != null) {
-            data[initialPos] = -3;
             if (data[initialPos] < 0) {
                 String thisByte = String.format("%x", data[initialPos]);
-                value = Integer.parseInt(thisByte);
+                value = Integer.parseInt(thisByte, 16);
             } else {
                 value = Math.abs(data[initialPos]);
             }

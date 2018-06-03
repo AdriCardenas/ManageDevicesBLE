@@ -32,6 +32,7 @@ public class Constants {
     public static final String WEIGHT = "user_weight";
     public static final String STEPS_GOAL = "user_steps_goal";
     public static final String IS_CONFIGURED = "is_configured";
+    public static final String HEIGHT = "user_height";
 
     public static class Basic {
         public static UUID service = UUID.fromString("0000fee0-0000-1000-8000-00805f9b34fb");

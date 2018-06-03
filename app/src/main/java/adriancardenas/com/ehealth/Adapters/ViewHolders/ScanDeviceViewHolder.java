@@ -27,6 +27,7 @@ public class ScanDeviceViewHolder extends RecyclerView.ViewHolder {
     private ProgressBar signalBar;
     private TextView deviceName;
     private TextView addressDevice;
+    private TextView rssiSignal;
     private View rootCell;
     private Context context;
 
@@ -36,6 +37,7 @@ public class ScanDeviceViewHolder extends RecyclerView.ViewHolder {
         addressDevice = itemView.findViewById(R.id.address_device);
         signalBar = itemView.findViewById(R.id.signal_progress_bar);
         rootCell = itemView.findViewById(R.id.root_cell);
+        rssiSignal = itemView.findViewById(R.id.signal_rssi);
         context = itemView.getContext();
     }
 
@@ -43,6 +45,8 @@ public class ScanDeviceViewHolder extends RecyclerView.ViewHolder {
         device = bluetoothDevice;
         deviceName.setText(device.getName());
         addressDevice.setText(device.getAddress());
+        String rssi = String.valueOf(device.getRssi())+"dBm";
+        rssiSignal.setText(rssi);
         signalBar.setVisibility(View.VISIBLE);
         signalBar.setProgress(getIntensity(device.getRssi()));
         rootCell.setOnClickListener((View) -> {

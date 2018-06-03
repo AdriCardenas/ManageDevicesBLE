@@ -32,6 +32,10 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="Roboto.ExtraBig.Bold" parent="Roboto.ExtraBig">
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <!--Text Input-->
     <style name="TextInput.Error" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/red_alert</item>

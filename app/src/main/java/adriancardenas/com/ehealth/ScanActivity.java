@@ -55,6 +55,7 @@ public class ScanActivity extends AppCompatActivity implements ScanItemListener 
     private Boolean isScanning = false;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeScanner bluetoothLeScanner;
+    private boolean isTurningOnBluetooth = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,6 @@ public class ScanActivity extends AppCompatActivity implements ScanItemListener 
 
         scanButton.setOnClickListener((View v) -> {
             //swapItem(v);
-            checkBluetoothIsOn();
             if (isScanning) {
                 isScanning = false;
                 progressBar.setVisibility(View.GONE);
@@ -86,6 +86,13 @@ public class ScanActivity extends AppCompatActivity implements ScanItemListener 
                 stopScanning();
             } else {
                 checkBluetoothIsOn();
+                while (isTurningOnBluetooth) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 if (mBluetoothAdapter != null) {
                     emptyTvScan.setVisibility(View.VISIBLE);
                     isScanning = true;
@@ -119,6 +126,7 @@ public class ScanActivity extends AppCompatActivity implements ScanItemListener 
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            isTurningOnBluetooth = true;
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_BLUETOOTH_ENABLE_CODE);
         }
@@ -191,7 +199,6 @@ public class ScanActivity extends AppCompatActivity implements ScanItemListener 
     };
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -203,6 +210,7 @@ public class ScanActivity extends AppCompatActivity implements ScanItemListener 
                 Utils.showSnackbar(constraintLayout, getResources().getString(R.string.request_activate_bluetooth));
             }
         }
+        isTurningOnBluetooth = false;
     }
 
     @Override
