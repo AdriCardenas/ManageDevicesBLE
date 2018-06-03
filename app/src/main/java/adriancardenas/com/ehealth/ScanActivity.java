@@ -1,10 +1,7 @@
 package adriancardenas.com.ehealth;
 
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
@@ -14,12 +11,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
-import android.support.constraint.Placeholder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +26,6 @@ import java.util.List;
 
 import adriancardenas.com.ehealth.Adapters.ScanAdapter;
 import adriancardenas.com.ehealth.Utils.Constants;
-import adriancardenas.com.ehealth.Utils.GattManager;
 import adriancardenas.com.ehealth.Utils.Utils;
 import adriancardenas.com.ehealth.model.BluetoothLowEnergyDevice;
 import adriancardenas.com.ehealth.model.ScanItemListener;

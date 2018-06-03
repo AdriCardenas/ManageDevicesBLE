@@ -14,4 +14,8 @@
     <string name="height">Height</string>
     <string name="error_take_photo">Error taking a photo</string>
     <string name="empty_scan_data">No data available</string>
+    <string name="your_daily_info">Daily info</string>
+    <string name="steps_daily_title">Steps today:</string>
+    <string name="distance_daily_title">Distance traveled today:</string>
+    <string name="calorie_daily_title">Calories:</string>
 </resources>

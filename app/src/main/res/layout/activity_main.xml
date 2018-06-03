@@ -2,22 +2,181 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout_cell"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="adriancardenas.com.ehealth.MainActivity">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="200dp"
+        android:layout_height="240dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/profile_default"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <include layout="@layout/personal_data_central_image" />
-    </android.support.v7.widget.CardView>
+    <TextView
+        android:id="@+id/personal_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:text="175cm"
+        app:layout_constraintCircle="@id/profile_image"
+        app:layout_constraintCircleAngle="75"
+        app:layout_constraintCircleRadius="140dp" />
 
+    <TextView
+        android:id="@+id/personal_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="70kg"
+        app:layout_constraintCircle="@id/profile_image"
+        app:layout_constraintCircleAngle="105"
+        app:layout_constraintCircleRadius="140dp" />
+
+    <TextView
+        android:id="@+id/personal_distance_mean"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/distance_mean"
+        app:layout_constraintCircle="@id/profile_image"
+        app:layout_constraintCircleAngle="255"
+        app:layout_constraintCircleRadius="140dp" />
+
+    <TextView
+        android:id="@+id/personal_steps_mean"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/steps_mean"
+        app:layout_constraintCircle="@id/profile_image"
+        app:layout_constraintCircleAngle="285"
+        app:layout_constraintCircleRadius="140dp" />
+
+    <ImageView
+        android:id="@+id/add_photo_iv"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_add_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="@+id/profile_image" />
+
+    <ImageView
+        android:id="@+id/battery_lvl_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_battery_10"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@+id/battery_lvl_tv"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/battery_lvl_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="99%"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/battery_lvl_iv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/battery_lvl_iv" />
+
+    <TextView
+        android:id="@+id/daily_data"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="@string/your_daily_info"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
+
+    <TextView
+        android:id="@+id/steps_today_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/steps_daily_title"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/steps_today_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/daily_data" />
+
+    <TextView
+        android:id="@+id/steps_today_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="end"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/steps_today_title"
+        app:layout_constraintTop_toBottomOf="@+id/daily_data" />
+
+    <TextView
+        android:id="@+id/distance_today_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/distance_daily_title"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/distance_today_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/steps_today_title" />
+
+    <TextView
+        android:id="@+id/distance_today_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="end"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/distance_today_title"
+        app:layout_constraintTop_toBottomOf="@+id/steps_today_tv" />
+
+    <TextView
+        android:id="@+id/calorie_today_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/calorie_daily_title"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/calorie_today_tv"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/distance_today_title" />
+
+    <TextView
+        android:id="@+id/calorie_today_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="end"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/calorie_today_title"
+        app:layout_constraintTop_toBottomOf="@+id/distance_today_tv" />
 </android.support.constraint.ConstraintLayout>

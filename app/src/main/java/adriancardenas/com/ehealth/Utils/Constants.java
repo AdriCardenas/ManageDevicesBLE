@@ -30,7 +30,15 @@ public class Constants {
 
     public static class Basic {
         public static UUID service = UUID.fromString("0000fee0-0000-1000-8000-00805f9b34fb");
-        public static UUID batteryCharacteristic = UUID.fromString("00000006-0000-3512-2118-0009af100700");
+        public static UUID BATTERY_CHARASTERISTIC = UUID.fromString("00000006-0000-3512-2118-0009af100700");
+        public static UUID Characteristic1 = UUID.fromString("00000010-0000-3512-2118-0009af100700");
+        public static UUID Characteristic2 = UUID.fromString("00000008-0000-3512-2118-0009af100700");
+        public static UUID REALTIME_STEPS_CHARACTERISTIC = UUID.fromString("00000007-0000-3512-2118-0009af100700");
+        public static UUID ACTIVITY_DATA_CHARASTERISTIC = UUID.fromString("00000005-0000-3512-2118-0009af100700");
+        public static UUID Characteristic5 = UUID.fromString("00000004-0000-3512-2118-0009af100700");
+        public static UUID Characteristic6 = UUID.fromString("00000003-0000-3512-2118-0009af100700");
+        public static UUID Characteristic7 = UUID.fromString("00000002-0000-3512-2118-0009af100700");
+        public static UUID Characteristic8 = UUID.fromString("00000001-0000-3512-2118-0009af100700");
     }
 
     public static class HeartRate {

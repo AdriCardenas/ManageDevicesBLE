@@ -30,11 +30,9 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.UUID;
 
 import adriancardenas.com.ehealth.Utils.Constants;
-import adriancardenas.com.ehealth.Utils.GattManager;
 import adriancardenas.com.ehealth.Utils.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +56,12 @@ public class MainActivity extends AppCompatActivity {
     TextView batteryLvlTv;
     @BindView(R.id.battery_lvl_iv)
     ImageView batteryLvlIv;
+    @BindView(R.id.steps_today_tv)
+    TextView stepsTodayTv;
+    @BindView(R.id.calorie_today_tv)
+    TextView caloriesTodayTv;
+    @BindView(R.id.distance_today_tv)
+    TextView distanceTodayTv;
 
 
     private Uri uriPhoto;
@@ -191,17 +195,26 @@ public class MainActivity extends AppCompatActivity {
             Log.v("test", "onCharacteristicRead");
             byte[] data = characteristic.getValue();
             UUID uuid = characteristic.getUuid();
-            if (uuid.equals(Constants.Basic.batteryCharacteristic)) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        batteryLvlIv.setVisibility(View.VISIBLE);
-                        batteryLvlTv.setVisibility(View.VISIBLE);
-                        String str = String.valueOf(data[1]);
-                        batteryLvlTv.setText(str+"%");
-                        updateBatteryLevelIv(data[1]);
-                    }
+            if (data !=null  && uuid.equals(Constants.Basic.BATTERY_CHARASTERISTIC)) {
+                runOnUiThread(() -> {
+                    batteryLvlIv.setVisibility(View.VISIBLE);
+                    batteryLvlTv.setVisibility(View.VISIBLE);
+                    String str = String.valueOf(data[1]);
+                    batteryLvlTv.setText(str + "%");
+                    updateBatteryLevelIv(data[1]);
+                    getRealTimeSteps();
                 });
+            } else if (data !=null && characteristic.getUuid().equals(Constants.Basic.REALTIME_STEPS_CHARACTERISTIC)) {
+                runOnUiThread(() -> {
+                    String calories = getDataValue(data, 9, 11);
+                    String distance = getDataValue(data, 5, 8);
+                    String steps = getDataValue(data, 1, 4);
+                    stepsTodayTv.setText(steps);
+                    distanceTodayTv.setText(distance+"m");
+                    caloriesTodayTv.setText(calories+"cal");
+                });
+            } else if (characteristic.getUuid().equals(Constants.Basic.ACTIVITY_DATA_CHARASTERISTIC)) {
+
             }
         }
 
@@ -216,17 +229,25 @@ public class MainActivity extends AppCompatActivity {
             super.onCharacteristicChanged(gatt, characteristic);
             Log.v("test", "onCharacteristicChanged");
             byte[] data = characteristic.getValue();
-            if (characteristic.getUuid().equals(Constants.Basic.batteryCharacteristic)) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        batteryLvlIv.setVisibility(View.VISIBLE);
-                        batteryLvlTv.setVisibility(View.VISIBLE);
-                        String str = String.valueOf(data[1]);
-                        batteryLvlTv.setText(str+"%");
-                        updateBatteryLevelIv(data[1]);
-                    }
+            if (characteristic.getUuid().equals(Constants.Basic.BATTERY_CHARASTERISTIC)) {
+                runOnUiThread(() -> {
+                    batteryLvlIv.setVisibility(View.VISIBLE);
+                    batteryLvlTv.setVisibility(View.VISIBLE);
+                    String str = String.valueOf(data[1]);
+                    batteryLvlTv.setText(str + "%");
+                    updateBatteryLevelIv(data[1]);
+                    getRealTimeSteps();
                 });
+            } else if (characteristic.getUuid().equals(Constants.Basic.REALTIME_STEPS_CHARACTERISTIC)) {
+                String calories = getDataValue(data, 9, 12);
+                String distance = getDataValue(data, 5, 8);
+                String steps = getDataValue(data, 1, 4);
+                stepsTodayTv.setText(steps);
+                distanceTodayTv.setText(distance+"m");
+                caloriesTodayTv.setText(calories+"cal");
+                getActivityData();
+            } else if (characteristic.getUuid().equals(Constants.Basic.ACTIVITY_DATA_CHARASTERISTIC)) {
+
             }
             //TODO INCLUDE MORE CHARACTERISTIC
         }
@@ -262,12 +283,44 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    void getBatteryStatus() {
-        BluetoothGattCharacteristic bchar = bluetoothGatt.getService(Constants.Basic.service)
-                .getCharacteristic(Constants.Basic.batteryCharacteristic);
-        if (!bluetoothGatt.readCharacteristic(bchar)) {
-            Utils.showSnackbar(constraintLayout, "Failed get battery info");
+    private String getDataValue(byte[] data, int initialPos, int finalPos) {
+        int value = 0;
+        if (data != null) {
+            value = Math.abs(data[initialPos]);
         }
 
+        if (data[initialPos + 1] != 0) {
+            value += Math.abs(data[initialPos + 1]) * 256;
+        }
+        if (data[initialPos + 2] != 0) {
+            value += Math.abs(data[initialPos + 1]) * 256 * 256;
+        }
+
+        return String.valueOf(value);
+    }
+
+    void getBatteryStatus() {
+        BluetoothGattCharacteristic bchar = bluetoothGatt.getService(Constants.Basic.service)
+                .getCharacteristic(Constants.Basic.BATTERY_CHARASTERISTIC);
+
+        if (!bluetoothGatt.readCharacteristic(bchar)) {
+            Utils.showSnackbar(constraintLayout, "Failed get info");
+        }
+    }
+
+    void getRealTimeSteps() {
+        BluetoothGattCharacteristic bchar = bluetoothGatt.getService(Constants.Basic.service)
+                .getCharacteristic(Constants.Basic.REALTIME_STEPS_CHARACTERISTIC);
+        if (!bluetoothGatt.readCharacteristic(bchar)) {
+            Utils.showSnackbar(constraintLayout, "Failed get real time steps");
+        }
+    }
+
+    void getActivityData() {
+        BluetoothGattCharacteristic bchar = bluetoothGatt.getService(Constants.Basic.service)
+                .getCharacteristic(Constants.Basic.ACTIVITY_DATA_CHARASTERISTIC);
+        if (!bluetoothGatt.readCharacteristic(bchar)) {
+            Utils.showSnackbar(constraintLayout, "Failed get activity data");
+        }
     }
 }
