@@ -111,7 +111,7 @@
                 style="@style/Roboto.ExtraBig"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="num"
+                android:inputType="numberDecimal"
                 android:textColorHint="@color/colorPrimaryDark" />
         </android.support.design.widget.TextInputLayout>
 
