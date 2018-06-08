@@ -19,6 +19,7 @@ public class Constants {
     public static final int REQUEST_LOCATION_ENABLE_CODE = 101;
     public static final int WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT = 103;
     public static final int REQUEST_TAKE_PHOTO_RESULT = 104;
+    public static final int REQUEST_ADD_WEIGHT_RESULT = 105;
 
     public static final int SCAN_PERIOD = 10000;
 
@@ -33,6 +34,7 @@ public class Constants {
     public static final String STEPS_GOAL = "user_steps_goal";
     public static final String IS_CONFIGURED = "is_configured";
     public static final String HEIGHT = "user_height";
+
 
     public static class Basic {
         public static UUID service = UUID.fromString("0000fee0-0000-1000-8000-00805f9b34fb");

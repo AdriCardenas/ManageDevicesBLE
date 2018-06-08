@@ -46,7 +46,12 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <activity android:name=".ConfigurationActivity"></activity>
+        <activity android:name=".ConfigurationActivity" />
+        <activity
+            android:name=".SmartBandPagerActivity"
+            android:label="@string/title_activity_smart_band_pager"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AddWeightActivity"></activity>
     </application>
 
 </manifest>

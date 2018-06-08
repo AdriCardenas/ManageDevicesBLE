@@ -11,6 +11,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import adriancardenas.com.ehealth.Database.DatabaseOperations;
 import adriancardenas.com.ehealth.Utils.Constants;
 import adriancardenas.com.ehealth.Utils.Utils;
 import butterknife.BindView;
@@ -84,9 +88,14 @@ public class ConfigurationActivity extends AppCompatActivity {
         editor.putString(Constants.NAME, name);
         editor.putString(Constants.AGE, age);
         editor.putString(Constants.STEPS_GOAL, goal);
-        editor.putString(Constants.WEIGHT, weight);
         editor.putString(Constants.HEIGHT, height);
         editor.putBoolean(Constants.IS_CONFIGURED, true);
+
+        Date cDate = new Date();
+        String fDate = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
+        DatabaseOperations databaseOperations = DatabaseOperations.getInstance(this);
+        databaseOperations.insertWeight(fDate, weight);
+
         editor.apply();
     }
 

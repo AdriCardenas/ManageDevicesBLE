@@ -33,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import adriancardenas.com.ehealth.Database.DatabaseOperations;
 import adriancardenas.com.ehealth.Utils.Constants;
 import adriancardenas.com.ehealth.Utils.Utils;
 import butterknife.BindView;
@@ -92,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void updatePersonalData() {
         SharedPreferences sharedPref = getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
-        float weight = Float.parseFloat(sharedPref.getString(Constants.WEIGHT, ""));
+        DatabaseOperations databaseOperations = DatabaseOperations.getInstance(this);
+        float weight =  databaseOperations.getLastWeight();
         float height = Float.parseFloat(sharedPref.getString(Constants.HEIGHT, ""));
 
         personalWeight.setText(String.format("%.1f kg", weight));

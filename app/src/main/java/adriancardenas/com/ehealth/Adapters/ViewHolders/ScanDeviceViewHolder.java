@@ -14,6 +14,7 @@ import android.widget.TextView;
 import adriancardenas.com.ehealth.MainActivity;
 import adriancardenas.com.ehealth.R;
 import adriancardenas.com.ehealth.ScanActivity;
+import adriancardenas.com.ehealth.SmartBandPagerActivity;
 import adriancardenas.com.ehealth.model.BluetoothLowEnergyDevice;
 import adriancardenas.com.ehealth.model.ScanItemListener;
 
@@ -54,7 +55,7 @@ public class ScanDeviceViewHolder extends RecyclerView.ViewHolder {
             Log.v("test", "Device name " + bluetoothDevice.getName());
 
             scanItemListener.onClickScanItem();
-            Intent intent = new Intent(context, MainActivity.class);
+            Intent intent = new Intent(context, SmartBandPagerActivity.class);
             context.startActivity(intent);
         });
     }
