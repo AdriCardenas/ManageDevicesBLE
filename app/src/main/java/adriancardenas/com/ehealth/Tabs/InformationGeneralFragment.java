@@ -39,13 +39,11 @@ import java.util.Date;
 import java.util.UUID;
 
 import adriancardenas.com.ehealth.Database.DatabaseOperations;
-import adriancardenas.com.ehealth.MainActivity;
 import adriancardenas.com.ehealth.R;
 import adriancardenas.com.ehealth.Utils.Constants;
 import adriancardenas.com.ehealth.Utils.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static adriancardenas.com.ehealth.Utils.Constants.WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT;
 import static adriancardenas.com.ehealth.Utils.GattManager.bluetoothGatt;

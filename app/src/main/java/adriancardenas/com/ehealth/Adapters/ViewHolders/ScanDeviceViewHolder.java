@@ -1,8 +1,5 @@
 package adriancardenas.com.ehealth.Adapters.ViewHolders;
 
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.le.BluetoothLeScanner;
-import android.bluetooth.le.ScanCallback;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -11,9 +8,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import adriancardenas.com.ehealth.MainActivity;
 import adriancardenas.com.ehealth.R;
-import adriancardenas.com.ehealth.ScanActivity;
 import adriancardenas.com.ehealth.SmartBandPagerActivity;
 import adriancardenas.com.ehealth.model.BluetoothLowEnergyDevice;
 import adriancardenas.com.ehealth.model.ScanItemListener;

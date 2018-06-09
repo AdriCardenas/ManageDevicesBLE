@@ -1,16 +1,32 @@
 package adriancardenas.com.ehealth;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.ScrollView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,6 +35,9 @@ import adriancardenas.com.ehealth.Utils.Constants;
 import adriancardenas.com.ehealth.Utils.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static adriancardenas.com.ehealth.Utils.Constants.WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT;
+import static adriancardenas.com.ehealth.Utils.Utils.getPhotoCode;
 
 public class ConfigurationActivity extends AppCompatActivity {
     @BindView(R.id.name_user_layout)
@@ -46,12 +65,26 @@ public class ConfigurationActivity extends AppCompatActivity {
     @BindView(R.id.height_user)
     TextInputEditText heightUser;
 
+    @BindView(R.id.profile_image)
+    ImageView profileImage;
+    @BindView(R.id.add_photo_iv)
+    ImageView addPhotoIv;
+
+    @BindView(R.id.root_cell)
+    ScrollView scrollView;
+
+    private Uri uriPhoto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
 
         ButterKnife.bind(this);
+
+        initProfilePhoto();
+
+        initFields();
     }
 
     @Override
@@ -126,5 +159,92 @@ public class ConfigurationActivity extends AppCompatActivity {
             correctField = false;
         }
         return correctField;
+    }
+
+    private void initFields() {
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
+        DatabaseOperations operations = DatabaseOperations.getInstance(this);
+        String height = sharedPref.getString(Constants.HEIGHT, "");
+        Float weight = operations.getLastWeight();
+        String goal = sharedPref.getString(Constants.STEPS_GOAL, "");
+        String name = sharedPref.getString(Constants.NAME, "");
+        String age = sharedPref.getString(Constants.AGE, "");
+
+        if(!name.equals("")){
+            nameUser.setText(name);
+        }
+
+        if(!stepsGoal.equals("")){
+            stepsGoal.setText(goal);
+        }
+
+        if(!height.equals("")){
+            heightUser.setText(height);
+        }
+
+        if(!age.equals("")){
+            ageUser.setText(age);
+        }
+
+        if(weight!=0){
+            weightUser.setText(String.valueOf(weight));
+        }
+    }
+
+    private void initProfilePhoto() {
+        SharedPreferences sharedPref = this.getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
+        String url = sharedPref.getString(Constants.PHOTO, "");
+
+        if (!url.equals("")) {
+            Glide.with(this).load(url).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.ALL)).into(profileImage);
+        }
+
+        addPhotoIv.setOnClickListener((View) -> {
+            if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_EXTERNAL_STORAGE_PERMISSION_RESULT);
+                initCameraPhoto();
+            } else {
+                initCameraPhoto();
+            }
+        });
+    }
+
+    private void initCameraPhoto() {
+        String photoPath = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES) + getPhotoCode() + ".jpg";
+        File photo = new File(photoPath);
+
+        try {
+            photo.createNewFile();
+            uriPhoto = FileProvider.getUriForFile(this, "adriancardenas.com.ehealth", photo);
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriPhoto);
+            startActivityForResult(cameraIntent, Constants.REQUEST_TAKE_PHOTO_RESULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("*ERROR*", "failed to create a file photo");
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.REQUEST_TAKE_PHOTO_RESULT) {
+            if (resultCode == RESULT_CANCELED) {
+                Utils.showSnackbar(scrollView, getResources().getString(R.string.error_take_photo));
+            } else {
+                if (uriPhoto != null && uriPhoto.getPath().contains("jpg")) {
+                    SharedPreferences sharedPref = this.getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(Constants.PHOTO, uriPhoto.toString());
+                    editor.apply();
+
+                    Glide.with(this).load(uriPhoto).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(profileImage);
+                    uriPhoto = null;
+                } else {
+                    Utils.showSnackbar(scrollView, getResources().getString(R.string.error_take_photo));
+                }
+            }
+        }
     }
 }

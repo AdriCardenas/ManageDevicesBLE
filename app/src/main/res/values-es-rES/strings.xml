@@ -21,4 +21,14 @@
     <string name="name">Nombre</string>
     <string name="introduce_steps_goal_error">Introduce un objetivo de pasos</string>
     <string name="welcome">Bienvenido</string>
+    <string name="introduce_height">Introduce tu altura</string>
+    <string name="steps_evolution">Evolución de los pasos</string>
+    <string name="general_information">Información general</string>
+    <string name="weight_evolution">Evolucion del peso</string>
+    <string name="steps">Pasos</string>
+    <string name="general">General</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="heart_rate">Ritmo cardiaco</string>
+    <string name="heart_rate_evolution">Evolución del ritmo cardiaco</string>
+    <string name="profile">Perfil</string>
 </resources>
