@@ -73,7 +73,7 @@ public class WeightEvolutionFragment extends Fragment {
     }
 
     private void drawLine() {
-        lineChart = getActivity().findViewById(R.id.chart);
+        lineChart = getActivity().findViewById(R.id.weight_chart);
         if (lineChart != null) {
             Description description = new Description();
             description.setText(getString(R.string.weight_evolution));
@@ -82,6 +82,7 @@ public class WeightEvolutionFragment extends Fragment {
             LineDataSet lineDataSet = new LineDataSet(getDataSet(), getString(R.string.weight));
             lineDataSet.setDrawFilled(true);
             lineDataSet.setColors(ColorTemplate.PASTEL_COLORS);
+            lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
             LineData lineData = new LineData(lineDataSet);
             lineChart.setData(lineData);
 

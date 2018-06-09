@@ -47,15 +47,13 @@ import static adriancardenas.com.ehealth.Utils.Utils.getPhotoCode;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.profile_image)
-    CircleImageView profileImage;
+    ImageView profileImage;
     @BindView(R.id.add_photo_iv)
     ImageView addPhotoIv;
     @BindView(R.id.constraint_layout_cell)
     ConstraintLayout constraintLayout;
     @BindView(R.id.personal_imc)
     TextView personalImc;
-    @BindView(R.id.personal_weight)
-    TextView personalWeight;
     @BindView(R.id.battery_lvl_tv)
     TextView batteryLvlTv;
     @BindView(R.id.battery_lvl_iv)
@@ -96,8 +94,6 @@ public class MainActivity extends AppCompatActivity {
         DatabaseOperations databaseOperations = DatabaseOperations.getInstance(this);
         float weight =  databaseOperations.getLastWeight();
         float height = Float.parseFloat(sharedPref.getString(Constants.HEIGHT, ""));
-
-        personalWeight.setText(String.format("%.1f kg", weight));
 
         float imc = weight / (height / 100 * height / 100);
 
@@ -231,8 +227,9 @@ public class MainActivity extends AppCompatActivity {
                 });
             } else if (data != null && characteristic.getUuid().equals(Constants.Basic.REALTIME_STEPS_CHARACTERISTIC)) {
                 runOnUiThread(() -> updateDailyInfo(data));
+                getActivityData();
             } else if (characteristic.getUuid().equals(Constants.Basic.ACTIVITY_DATA_CHARASTERISTIC)) {
-
+                Log.d("Hola","Hola");
             }
         }
 

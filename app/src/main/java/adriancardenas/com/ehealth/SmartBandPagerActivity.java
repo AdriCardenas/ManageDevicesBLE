@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import adriancardenas.com.ehealth.Adapters.PagerAdapter;
+import adriancardenas.com.ehealth.Tabs.HeartRateEvolutionFragment;
 import adriancardenas.com.ehealth.Tabs.InformationGeneralFragment;
 import adriancardenas.com.ehealth.Tabs.StepsEvolutionFragment;
 import adriancardenas.com.ehealth.Tabs.WeightEvolutionFragment;
@@ -63,9 +64,11 @@ public class SmartBandPagerActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         pagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(new StepsEvolutionFragment(), getString(R.string.steps_evolution));
-        pagerAdapter.addFragment(new InformationGeneralFragment(), getString(R.string.general_information));
-        pagerAdapter.addFragment(new WeightEvolutionFragment(), getString(R.string.weight_evolution));
+        pagerAdapter.addFragment(new InformationGeneralFragment(), getString(R.string.general));
+        pagerAdapter.addFragment(new StepsEvolutionFragment(), getString(R.string.steps));
+        pagerAdapter.addFragment(new WeightEvolutionFragment(), getString(R.string.weight));
+        pagerAdapter.addFragment(new HeartRateEvolutionFragment(), getString(R.string.heart_rate));
+        viewPager.setOffscreenPageLimit(1);
         viewPager.setAdapter(pagerAdapter);
     }
 }
