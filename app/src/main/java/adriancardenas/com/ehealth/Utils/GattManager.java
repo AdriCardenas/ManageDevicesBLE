@@ -7,5 +7,4 @@ import adriancardenas.com.ehealth.model.BluetoothLowEnergyDevice;
 public class GattManager {
     public static  BluetoothLowEnergyDevice device;
     public static BluetoothGatt bluetoothGatt;
-    public static byte[] battery;
 }

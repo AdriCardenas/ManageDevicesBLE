@@ -21,7 +21,7 @@ public class Constants {
     public static final int REQUEST_TAKE_PHOTO_RESULT = 104;
     public static final int REQUEST_ADD_WEIGHT_RESULT = 105;
 
-    public static final int SCAN_PERIOD = 10000;
+    public static final int SCAN_PERIOD = 15000;
 
     public static final String LOCAL_PATH_PHOTOS = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ehealth/images/";
     public static final String LOCAL_APPLICATION_PATH = "adriancardenas.com.ehealth";
