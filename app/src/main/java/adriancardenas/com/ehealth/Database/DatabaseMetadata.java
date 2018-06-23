@@ -1,10 +1,11 @@
 package adriancardenas.com.ehealth.Database;
 
 public class DatabaseMetadata {
-    interface  TABLES{
+    public interface  TABLES{
         String WEIGHT = "weight";
         String HEART = "heart";
         String STEPS = "steps";
+        String DISTANCE = "distance";
     }
 
     interface WEIGHT_COLUMS{
@@ -18,6 +19,11 @@ public class DatabaseMetadata {
     }
 
     interface HEART_RATE_COLUMS{
+        String ID = "id";
+        String VALUE = "value";
+    }
+
+    interface DISTANCE_COLUMN{
         String ID = "id";
         String VALUE = "value";
     }

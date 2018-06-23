@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothProfile;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,6 +53,8 @@ import static adriancardenas.com.ehealth.Utils.Utils.getPhotoCode;
 import static android.app.Activity.RESULT_CANCELED;
 
 public class InformationGeneralFragment extends Fragment {
+    @BindView(R.id.ic_share)
+    ImageView shareIv;
     @BindView(R.id.profile_image)
     ImageView profileImage;
     @BindView(R.id.add_photo_iv)
@@ -74,8 +77,12 @@ public class InformationGeneralFragment extends Fragment {
     TextView distanceTodayTv;
     @BindView(R.id.heart_rate_tv)
     TextView heartRateTv;
-    @BindView(R.id.circular_progress)
-    ProgressBar circularPb;
+    @BindView(R.id.personal_goal_steps)
+    TextView goalSteps;
+    @BindView(R.id.personal_percent_steps)
+    TextView percentSteps;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
     @BindView(R.id.distance_today_iv)
     ImageView distanceTodayIv;
     @BindView(R.id.steps_today_iv)
@@ -281,7 +288,7 @@ public class InformationGeneralFragment extends Fragment {
                     Date cDate = new Date();
                     String fDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cDate);
                     String heartRate = String.valueOf(data[1]);
-                    if(!heartRate.isEmpty() && !heartRate.equals("0")){
+                    if (!heartRate.isEmpty() && !heartRate.equals("0")) {
                         DatabaseOperations databaseOperations = DatabaseOperations.getInstance(getContext());
                         databaseOperations.insertHeartRate(fDate, heartRate);
                         heartRateTv.setText(heartRate);
@@ -330,14 +337,24 @@ public class InformationGeneralFragment extends Fragment {
         SharedPreferences sharedPref = getContext().getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
         String goal = sharedPref.getString(Constants.STEPS_GOAL, "");
         if (!goal.equals("")) {
-            circularPb.setMax(Integer.parseInt(goal));
-            circularPb.setProgress(Integer.parseInt(steps));
+            progressBar.setMax(Integer.parseInt(goal));
+            goalSteps.setText(goal);
+            percentSteps.setText(getPercent(steps, goal));
+            progressBar.setProgress(Integer.parseInt(steps));
+            progressBar.setVisibility(View.VISIBLE);
+            if (Integer.parseInt(goal) < Integer.parseInt(steps)) {
+                progressBar.setProgressDrawable(getActivity().getDrawable(R.drawable.progress_bar));
+            }
+
             Date cDate = new Date();
             String fDate = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
             operations.insertSteps(fDate, steps);
-            circularPb.setVisibility(View.VISIBLE);
+            operations.insertDistance(fDate, distance);
+            shareIv.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
         } else {
-            circularPb.setVisibility(View.INVISIBLE);
+            shareIv.setVisibility(View.GONE);
+            progressBar.setVisibility(View.INVISIBLE);
         }
 
         stepsTodayTv.setText(steps);
@@ -345,6 +362,19 @@ public class InformationGeneralFragment extends Fragment {
         distanceTodayTv.setText(getFormatDistance(distance));
         distanceTodayIv.setVisibility(View.VISIBLE);
         caloriesTodayTv.setText(calories + "cal");
+
+        shareIv.setOnClickListener((View) -> {
+            String dailyInfo = String.format("Hoy he recorrido %s pasos suman un total de %s y es un %s de mi meta diaria. He quemado %s calorias"
+                    , steps, getFormatDistance(distance), getPercent(steps, goal), calories);
+            shareDailyInfo(dailyInfo);
+        });
+    }
+
+    private String getPercent(String steps, String goal) {
+        int s = Integer.parseInt(steps);
+        int g = Integer.parseInt(goal);
+        int p = s * 100 / g;
+        return p + "%";
     }
 
     private String getFormatDistance(String distance) {
@@ -353,8 +383,10 @@ public class InformationGeneralFragment extends Fragment {
         if (f > 1000) {
             f /= 1000;
             return String.format("%s km", String.format("%.2f", f));
+        } else {
+            result = result + " m";
         }
-        return distance;
+        return result;
     }
 
     private String getDataValue(byte[] data, int initialPos, int finalPos) {
@@ -421,5 +453,17 @@ public class InformationGeneralFragment extends Fragment {
 
     public static Fragment newInstance() {
         return new InformationGeneralFragment();
+    }
+
+    private void shareDailyInfo(String info) {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.my_daily_info)+": " + info);
+        shareIntent.setType("image/text");
+        try {
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_daily_info)));
+        } catch (ActivityNotFoundException e) {
+            Utils.showSnackbar(constraintLayout, "No App Available");
+        }
     }
 }

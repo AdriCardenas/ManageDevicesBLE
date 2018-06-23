@@ -12,6 +12,7 @@
     <color name="dark_black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="red_alert">#cc2222</color>
+    <color name="gray_light">#cccccc</color>
 
     <!--Battery colours-->
     <color name="battery_level_10">#bb3333</color>
@@ -22,5 +23,11 @@
     <color name="battery_level_80">#DAFF64</color>
     <color name="battery_level_90">#66CC33</color>
     <color name="battery_level_100">#44FA22</color>
+
+    <color name="achieved">#22fa2d</color>
+    <color name="achieved_background">#6c22a61b</color>
+
+    <color name="failed">#ec0000</color>
+    <color name="failed_background">#6ae73434</color>
 
 </resources>

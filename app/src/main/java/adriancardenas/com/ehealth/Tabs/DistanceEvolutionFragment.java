@@ -4,36 +4,42 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import adriancardenas.com.ehealth.model.TableRow;
-
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import adriancardenas.com.ehealth.Adapters.GenericRecyclerAdapter;
 import adriancardenas.com.ehealth.Database.DatabaseOperations;
 import adriancardenas.com.ehealth.R;
-import adriancardenas.com.ehealth.Utils.StringDateWithHoursComparator;
+import adriancardenas.com.ehealth.Utils.StringDateComparator;
 
-public class HeartRateEvolutionFragment extends Fragment {
+/**
+ * Created by Adrian on 21/06/2018.
+ */
+
+public class DistanceEvolutionFragment extends Fragment {
+
     LineChart lineChart;
-    RecyclerView table;
 
-    public HeartRateEvolutionFragment() {
+    public DistanceEvolutionFragment() {
 
     }
 
@@ -48,63 +54,45 @@ public class HeartRateEvolutionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         drawLine();
-        drawTable();
-    }
-
-    private void drawTable() {
-        table = getActivity().findViewById(R.id.table_layout);
-        DatabaseOperations databaseOperations = DatabaseOperations.getInstance(getContext());
-        HashMap<String, Integer> rates = databaseOperations.getHeartRates();
-
-        List<TableRow> tableRowList = new ArrayList<>();
-
-        List<String> dates = new ArrayList<>(rates.keySet());
-        Collections.sort(dates, new StringDateWithHoursComparator());
-
-        for (String date : dates) {
-            TableRow tableRow =
-                    new TableRow(date, String.valueOf(rates.get(date)));
-            tableRowList.add(tableRow);
-        }
-
-        GenericRecyclerAdapter genericRecyclerAdapter = new GenericRecyclerAdapter(tableRowList);
-        table.setLayoutManager(new LinearLayoutManager(getContext()));
-        table.setAdapter(genericRecyclerAdapter);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.heart_rate_tab, container, false);
+        View view = inflater.inflate(R.layout.distance_tab, container, false);
         return view;
     }
 
     private void drawLine() {
-        lineChart = getActivity().findViewById(R.id.heart_rate_chart);
+        lineChart = getActivity().findViewById(R.id.distance_chart);
         if (lineChart != null) {
             if (!getDataSet().isEmpty()) {
                 lineChart.setVisibility(View.VISIBLE);
 
                 Description description = new Description();
-                description.setText(getString(R.string.heart_rate_evolution));
+                description.setText(getString(R.string.distance_evolution));
                 lineChart.setDescription(description);
 
-                LineDataSet lineDataSet = new LineDataSet(getDataSet(), getString(R.string.heart_rate_evolution));
+                LineDataSet lineDataSet = new LineDataSet(getDataSet(), getString(R.string.distance_evolution));
                 lineDataSet.setDrawFilled(true);
-                lineDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+                lineDataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
                 lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
                 LineData lineData = new LineData(lineDataSet);
                 lineChart.setData(lineData);
 
                 //Hide grid layout
-
                 lineChart.getAxisLeft().setDrawGridLines(false);
                 lineChart.getAxisRight().setDrawGridLines(false);
                 lineChart.getXAxis().setDrawGridLines(false);
-                lineChart.getXAxis().setDrawLabels(false);
+                lineChart.getXAxis().setDrawLabels(true);
                 lineChart.disableScroll();
                 lineChart.setScaleEnabled(false);
-                lineChart.getLegend().setEnabled(false);
+
+                lineChart.getXAxis().setDrawLabels(false);
+                lineChart.getAxisRight().setDrawLabels(false);
+                lineChart.getAxisLeft().setTextColor(ColorTemplate.getHoloBlue());
+//                xAxis.setValueFormatter(new DateValueFormatter());
+//            lineChart.getLegend().setEnabled(false);
 
                 lineChart.animateXY(1000, 1000);
                 lineChart.invalidate();
@@ -120,13 +108,28 @@ public class HeartRateEvolutionFragment extends Fragment {
         DatabaseOperations databaseOperations = DatabaseOperations.getInstance(getContext());
         int i = 1;
 
-        HashMap<String, Integer> rates = databaseOperations.getHeartRates();
-        List<String> dates = new ArrayList<>(rates.keySet());
-        Collections.sort(dates, new StringDateWithHoursComparator());
+        HashMap<String, Float> distances = databaseOperations.getDistances();
+        List<String> dates = new ArrayList<>(distances.keySet());
+        Collections.sort(dates, new StringDateComparator());
         for (String d : dates) {
-            list.add(new Entry(i, rates.get(d)));
-            i++;
+            SimpleDateFormat format = new SimpleDateFormat("MM-dd");
+            try {
+                Date date = format.parse(d);
+                list.add(new Entry(i, distances.get(d)));
+                i++;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         return list;
+    }
+
+    public class DateValueFormatter implements IAxisValueFormatter {
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM");
+            return dateFormat.format(new Date(Float.valueOf(value).longValue()));
+        }
     }
 }

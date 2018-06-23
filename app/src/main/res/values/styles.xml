@@ -24,6 +24,15 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="Roboto.Small" parent="Roboto">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Roboto.Tiny" parent="Roboto">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
     <style name="Roboto.Big" parent="Roboto">
         <item name="android:textSize">18sp</item>
     </style>

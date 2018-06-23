@@ -8,7 +8,7 @@ import adriancardenas.com.ehealth.Database.DatabaseMetadata.*;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "agenda.db";
+    private static final String DATABASE_NAME = "BeFit.db";
     private static final String CREATE = "CREATE TABLE";
 
     public DatabaseHelper(Context context) {
@@ -20,6 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(String.format(CREATE + " %s (%s TEXT PRIMARY KEY, %s FLOAT NOT NULL)", TABLES.WEIGHT, WEIGHT_COLUMS.ID, WEIGHT_COLUMS.VALUE));
         db.execSQL(String.format(CREATE + " %s (%s TEXT PRIMARY KEY, %s NUMBER NOT NULL)", TABLES.STEPS, STEPS_COLUMS.ID, STEPS_COLUMS.VALUE));
         db.execSQL(String.format(CREATE + " %s (%s TEXT PRIMARY KEY, %s NUMBER NOT NULL)", TABLES.HEART, HEART_RATE_COLUMS.ID, HEART_RATE_COLUMS.VALUE));
+        db.execSQL(String.format(CREATE + " %s (%s TEXT PRIMARY KEY, %s FLOAT NOT NULL)", TABLES.DISTANCE, DISTANCE_COLUMN.ID, DISTANCE_COLUMN.VALUE));
     }
 
 
@@ -28,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLES.WEIGHT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLES.STEPS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLES.HEART);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLES.DISTANCE);
         onCreate(db);
     }
 }

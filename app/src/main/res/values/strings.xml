@@ -37,4 +37,11 @@
     <string name="heart_rate">Heart rate</string>
     <string name="heart_rate_evolution">Heart rate evolution</string>
     <string name="profile">Profile</string>
+    <string name="distance_evolution">Distance</string>
+    <string name="Distance">Distance</string>
+    <string name="download_data">Download data</string>
+    <string name="my_history">My personal data</string>
+    <string name="my_daily_info">My daily info</string>
+    <string name="value">Value</string>
+    <string name="date">Date</string>
 </resources>

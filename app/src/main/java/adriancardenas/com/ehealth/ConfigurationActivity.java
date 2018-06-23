@@ -74,6 +74,7 @@ public class ConfigurationActivity extends AppCompatActivity {
     ScrollView scrollView;
 
     private Uri uriPhoto;
+    private boolean isConnected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,10 @@ public class ConfigurationActivity extends AppCompatActivity {
         initProfilePhoto();
 
         initFields();
+
+        Intent intent = getIntent();
+
+        isConnected = intent.getBooleanExtra(Constants.CONNECTED, false);
     }
 
     @Override
@@ -100,9 +105,13 @@ public class ConfigurationActivity extends AppCompatActivity {
                 if (correctFields()) {
                     saveData();
 
-                    Intent intent = new Intent(ConfigurationActivity.this, ScanActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    if (isConnected) {
+                        finish();
+                    } else {
+                        Intent intent = new Intent(ConfigurationActivity.this, ScanActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
                 }
                 break;
         }
@@ -170,23 +179,23 @@ public class ConfigurationActivity extends AppCompatActivity {
         String name = sharedPref.getString(Constants.NAME, "");
         String age = sharedPref.getString(Constants.AGE, "");
 
-        if(!name.equals("")){
+        if (!name.equals("")) {
             nameUser.setText(name);
         }
 
-        if(!stepsGoal.equals("")){
+        if (!stepsGoal.equals("")) {
             stepsGoal.setText(goal);
         }
 
-        if(!height.equals("")){
+        if (!height.equals("")) {
             heightUser.setText(height);
         }
 
-        if(!age.equals("")){
+        if (!age.equals("")) {
             ageUser.setText(age);
         }
 
-        if(weight!=0){
+        if (weight != 0) {
             weightUser.setText(String.valueOf(weight));
         }
     }
@@ -236,7 +245,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                 if (uriPhoto != null && uriPhoto.getPath().contains("jpg")) {
                     SharedPreferences sharedPref = this.getSharedPreferences(Constants.LOCAL_APPLICATION_PATH, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(Constants.PHOTO, uriPhoto.toString());
+                    editor.putString(Constants.PHOTO, "");
                     editor.apply();
 
                     Glide.with(this).load(uriPhoto).apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE)).into(profileImage);

@@ -34,6 +34,11 @@ public class Constants {
     public static final String STEPS_GOAL = "user_steps_goal";
     public static final String IS_CONFIGURED = "is_configured";
     public static final String HEIGHT = "user_height";
+    public static final String CONNECTED = "isConnected";
+    public static final String DISTANCE_CSV = "distance.csv";
+    public static final String HEART_RATE_CSV = "heart.csv";
+    public static final String STEPS_CSV = "steps.csv";
+    public static final String WEIGHT_CSV = "weight.csv";
 
 
     public static class Basic {
