@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,16 +29,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import adriancardenas.com.ehealth.Adapters.GenericRecyclerAdapter;
 import adriancardenas.com.ehealth.Database.DatabaseOperations;
 import adriancardenas.com.ehealth.R;
 import adriancardenas.com.ehealth.Utils.StringDateComparator;
+import adriancardenas.com.ehealth.Utils.StringDateWithHoursComparator;
+import adriancardenas.com.ehealth.Utils.Utils;
+import adriancardenas.com.ehealth.model.TableRow;
 
 /**
  * Created by Adrian on 21/06/2018.
  */
 
 public class DistanceEvolutionFragment extends Fragment {
-
+    RecyclerView table;
     LineChart lineChart;
 
     public DistanceEvolutionFragment() {
@@ -54,6 +60,7 @@ public class DistanceEvolutionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         drawLine();
+        drawTable();
     }
 
     @Nullable
@@ -61,6 +68,27 @@ public class DistanceEvolutionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.distance_tab, container, false);
         return view;
+    }
+
+    private void drawTable() {
+        table = getActivity().findViewById(R.id.table_layout_distance);
+        DatabaseOperations databaseOperations = DatabaseOperations.getInstance(getContext());
+        HashMap<String, Float> distances = databaseOperations.getDistances();
+
+        List<TableRow> tableRowList = new ArrayList<>();
+
+        List<String> dates = new ArrayList<>(distances.keySet());
+        Collections.sort(dates, new StringDateComparator());
+
+        for (String date : dates) {
+            TableRow tableRow =
+                    new TableRow(date, String.format("%.1f", distances.get(date)));
+            tableRowList.add(tableRow);
+        }
+
+        GenericRecyclerAdapter genericRecyclerAdapter = new GenericRecyclerAdapter(tableRowList);
+        table.setLayoutManager(new LinearLayoutManager(getContext()));
+        table.setAdapter(genericRecyclerAdapter);
     }
 
     private void drawLine() {

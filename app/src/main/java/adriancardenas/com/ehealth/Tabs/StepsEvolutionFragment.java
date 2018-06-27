@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +22,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import adriancardenas.com.ehealth.Adapters.GenericRecyclerAdapter;
 import adriancardenas.com.ehealth.Database.DatabaseOperations;
 import adriancardenas.com.ehealth.R;
 import adriancardenas.com.ehealth.Utils.StringDateComparator;
+import adriancardenas.com.ehealth.model.TableRow;
 
 public class StepsEvolutionFragment extends Fragment {
     LineChart lineChart;
+    RecyclerView table;
 
     public StepsEvolutionFragment() {
 
@@ -42,6 +47,7 @@ public class StepsEvolutionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         drawLine();
+        drawTable();
     }
 
     @Nullable
@@ -49,6 +55,27 @@ public class StepsEvolutionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.steps_tab, container, false);
         return view;
+    }
+
+    private void drawTable() {
+        table = getActivity().findViewById(R.id.table_layout_steps);
+        DatabaseOperations databaseOperations = DatabaseOperations.getInstance(getContext());
+        HashMap<String, Integer> steps = databaseOperations.getSteps();
+
+        List<TableRow> tableRowList = new ArrayList<>();
+
+        List<String> dates = new ArrayList<>(steps.keySet());
+        Collections.sort(dates, new StringDateComparator());
+
+        for (String date : dates) {
+            TableRow tableRow =
+                    new TableRow(date, String.valueOf(steps.get(date)));
+            tableRowList.add(tableRow);
+        }
+
+        GenericRecyclerAdapter genericRecyclerAdapter = new GenericRecyclerAdapter(tableRowList);
+        table.setLayoutManager(new LinearLayoutManager(getContext()));
+        table.setAdapter(genericRecyclerAdapter);
     }
 
     private void drawLine() {

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,16 +26,19 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import adriancardenas.com.ehealth.Adapters.GenericRecyclerAdapter;
 import adriancardenas.com.ehealth.AddWeightActivity;
 import adriancardenas.com.ehealth.Database.DatabaseOperations;
 import adriancardenas.com.ehealth.R;
 import adriancardenas.com.ehealth.Utils.Constants;
 import adriancardenas.com.ehealth.Utils.StringDateComparator;
+import adriancardenas.com.ehealth.model.TableRow;
 
 import static android.app.Activity.RESULT_OK;
 
 public class WeightEvolutionFragment extends Fragment {
     LineChart lineChart;
+    RecyclerView table;
 
     public WeightEvolutionFragment() {
 
@@ -50,6 +55,7 @@ public class WeightEvolutionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         drawLine();
+        drawTable();
     }
 
     @Override
@@ -70,6 +76,27 @@ public class WeightEvolutionFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.weight_tab, container, false);
         return view;
+    }
+
+    private void drawTable() {
+        table = getActivity().findViewById(R.id.table_layout_weight);
+        DatabaseOperations databaseOperations = DatabaseOperations.getInstance(getContext());
+        HashMap<String, Float> weights = databaseOperations.getWeights();
+
+        List<TableRow> tableRowList = new ArrayList<>();
+
+        List<String> dates = new ArrayList<>(weights.keySet());
+        Collections.sort(dates, new StringDateComparator());
+
+        for (String date : dates) {
+            TableRow tableRow =
+                    new TableRow(date, String.format("%.1f", weights.get(date)));
+            tableRowList.add(tableRow);
+        }
+
+        GenericRecyclerAdapter genericRecyclerAdapter = new GenericRecyclerAdapter(tableRowList);
+        table.setLayoutManager(new LinearLayoutManager(getContext()));
+        table.setAdapter(genericRecyclerAdapter);
     }
 
     private void drawLine() {
