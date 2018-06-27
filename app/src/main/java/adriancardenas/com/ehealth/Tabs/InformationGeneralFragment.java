@@ -1,6 +1,7 @@
 package adriancardenas.com.ehealth.Tabs;
 
 import android.Manifest;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -106,6 +107,12 @@ public class InformationGeneralFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (device.getBluetoothDevice().getBondState() == BluetoothDevice.BOND_NONE) {
+            device.getBluetoothDevice().createBond();
+            Log.d("Bond", "Created with Device");
+        }
+
         bluetoothGatt = device.getBluetoothDevice().connectGatt(getContext(), true, bluetoothGattCallback);
 
         initProfilePhoto();
@@ -458,7 +465,7 @@ public class InformationGeneralFragment extends Fragment {
     private void shareDailyInfo(String info) {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.my_daily_info)+": " + info);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.my_daily_info) + ": " + info);
         shareIntent.setType("image/text");
         try {
             startActivity(Intent.createChooser(shareIntent, getString(R.string.share_daily_info)));
